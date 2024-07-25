@@ -2,17 +2,17 @@
 #include "../inc/main.hpp"
 
 
-const int parse(char *filename) {
+const int parse(char *filename, const t_node*& cmdPtr) {
     if (filename) {
-        readFile(filename);
+        readFile(filename, cmdPtr);
     } else {
-        readFromStdin();
+        readFromStdin(cmdPtr);
     }
 
     return EXIT_SUCCESS;
 }
 
-const t_node readFile(const std:: string& filename)
+const t_node*& readFile(const std:: string& filename, const t_node*& cmdPtr)
 {
     std::ifstream file(filename);
 
@@ -22,18 +22,24 @@ const t_node readFile(const std:: string& filename)
 
     std::string line;
     while (std::getline(file, line)) {
+        cmdPtr = strToNode(line);
         std::cout << line << std::endl;
     }
 
     file.close();
 }
 
-const t_node readFromStdin()
+const t_node*& readFromStdin(const t_node*& cmdPtr)
 {
     std::string line;
     while (std::getline(std::cin, line)) {
         std::cout << line << std::endl;
     }
+}
+
+const t_node*& strToNode(std::string line)
+{
+
 }
 
 // t_node *read_file(FILE *fp, t_header **header, t_prog_size *size) {

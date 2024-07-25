@@ -1,11 +1,14 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
-typedef struct s_node {
+typedef struct s_node t_node;
+
+struct t_node {
     const char* command;
     int type;
     int value;
-} t_node;
+    t_node* next;
+};
 
 
 template <typename T> class IOperand
