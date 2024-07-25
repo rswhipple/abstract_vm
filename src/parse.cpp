@@ -2,16 +2,6 @@
 #include "../inc/main.hpp"
 
 
-const int parse(char *filename, const t_node*& cmdPtr) {
-    if (filename) {
-        readFile(filename, cmdPtr);
-    } else {
-        readFromStdin(cmdPtr);
-    }
-
-    return EXIT_SUCCESS;
-}
-
 void readFile(const std:: string& filename, const t_node*& cmdPtr)
 {
     std::ifstream file(filename);
@@ -22,7 +12,7 @@ void readFile(const std:: string& filename, const t_node*& cmdPtr)
 
     std::string line;
     while (std::getline(file, line)) {
-        cmdPtr = strToNode(line);
+        strToNode(line);
         std::cout << line << std::endl;
     }
 
