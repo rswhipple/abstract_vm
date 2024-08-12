@@ -11,6 +11,8 @@ struct t_node {
 };
 
 
+
+// is the template necessary for this abstract class?
 template <typename T> class IOperand
 {
 public:
@@ -28,5 +30,101 @@ public:
 
   virtual ~IOperand() {}
 };
+
+class int8
+{
+private:
+	__int8 value;
+
+public:
+	std::string const& toString() const override {}
+
+	int getPrecision() const override {}
+	eOperandType getType() const override {}
+
+	IOperand * operator+(const IOperand &rhs) const override {}
+	IOperand * operator-(const IOperand &rhs) const override {}
+	IOperand * operator*(const IOperand &rhs) const override {}
+	IOperand * operator/(const IOperand &rhs) const override {}
+	IOperand * operator%(const IOperand &rhs) const override {}
+
+}
+
+class int16
+{
+private:
+	__int16 value;
+
+public:
+	std::string const& toString() const override {}
+
+	int getPrecision() const override {}
+	eOperandType getType() const override {}
+
+	IOperand * operator+(const IOperand &rhs) const override {}
+	IOperand * operator-(const IOperand &rhs) const override {}
+	IOperand * operator*(const IOperand &rhs) const override {}
+	IOperand * operator/(const IOperand &rhs) const override {}
+	IOperand * operator%(const IOperand &rhs) const override {}
+
+}
+
+class int32
+{
+private:
+	__int32 value;
+
+public:
+	std::string const& toString() const override {}
+
+	int getPrecision() const override {}
+	eOperandType getType() const override {}
+
+	IOperand * operator+(const IOperand &rhs) const override {}
+	IOperand * operator-(const IOperand &rhs) const override {}
+	IOperand * operator*(const IOperand &rhs) const override {}
+	IOperand * operator/(const IOperand &rhs) const override {}
+	IOperand * operator%(const IOperand &rhs) const override {}
+
+}
+
+class Float
+{
+private:
+	float value;
+
+public:
+	std::string const& toString() const override {}
+
+	int getPrecision() const override {}
+	eOperandType getType() const override {}
+
+	IOperand * operator+(const IOperand &rhs) const override {}
+	IOperand * operator-(const IOperand &rhs) const override {}
+	IOperand * operator*(const IOperand &rhs) const override {}
+	IOperand * operator/(const IOperand &rhs) const override {}
+	IOperand * operator%(const IOperand &rhs) const override {}
+
+}
+
+class Double
+{
+private:
+	double value;
+
+public:
+	std::string const& toString() const override {}
+
+	int getPrecision() const override {}
+	eOperandType getType() const override {}
+
+	IOperand * operator+(const IOperand &rhs) const override {}
+	IOperand * operator-(const IOperand &rhs) const override {}
+	IOperand * operator*(const IOperand &rhs) const override {}
+	IOperand * operator/(const IOperand &rhs) const override {}
+	IOperand * operator%(const IOperand &rhs) const override {}
+
+}
+
 
 #endif
