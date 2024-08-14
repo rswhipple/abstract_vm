@@ -1,6 +1,7 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
+
 typedef struct s_node t_node;
 
 struct t_node {
@@ -12,8 +13,8 @@ struct t_node {
 
 
 
-// is the template necessary for this abstract class?
-template <typename T> class IOperand
+// future iteration: using a template
+class IOperand
 {
 public:
 
@@ -31,13 +32,18 @@ public:
   virtual ~IOperand() {}
 };
 
-class int8
+class Int8: public IOperand
 {
 private:
-	__int8 value;
+	int8_t value;
+	std::string strValue;
 
 public:
-	std::string const& toString() const override {}
+	Int8(int8_t val) : value(val), strValue(std::to_string(val)) {}
+
+	std::string const & toString() const override {
+		return strValue;
+	}
 
 	int getPrecision() const override {}
 	eOperandType getType() const override {}
@@ -48,15 +54,20 @@ public:
 	IOperand * operator/(const IOperand &rhs) const override {}
 	IOperand * operator%(const IOperand &rhs) const override {}
 
-}
+};
 
-class int16
+class Int16: IOperand
 {
 private:
-	__int16 value;
+	int16_t value;
+	std::string strValue;
 
 public:
-	std::string const& toString() const override {}
+	Int16(int16_t val) : value(val), strValue(std::to_string(val)) {}
+
+	std::string const& toString() const override {
+		return strValue;
+	}
 
 	int getPrecision() const override {}
 	eOperandType getType() const override {}
@@ -67,15 +78,20 @@ public:
 	IOperand * operator/(const IOperand &rhs) const override {}
 	IOperand * operator%(const IOperand &rhs) const override {}
 
-}
+};
 
-class int32
+class Int32: IOperand
 {
 private:
-	__int32 value;
+	int32_t value;
+	std::string strValue;
 
 public:
-	std::string const& toString() const override {}
+	Int32(int32_t val) : value(val), strValue(std::to_string(val)) {}
+
+	std::string const& toString() const override {
+		return strValue;
+	}
 
 	int getPrecision() const override {}
 	eOperandType getType() const override {}
@@ -86,15 +102,20 @@ public:
 	IOperand * operator/(const IOperand &rhs) const override {}
 	IOperand * operator%(const IOperand &rhs) const override {}
 
-}
+};
 
-class Float
+class Float: IOperand
 {
 private:
 	float value;
+	std::string strValue;
 
 public:
-	std::string const& toString() const override {}
+	Float(float val) : value(val), strValue(std::to_string(val)) {}
+
+	std::string const& toString() const override {
+		return strValue;
+	}
 
 	int getPrecision() const override {}
 	eOperandType getType() const override {}
@@ -105,15 +126,20 @@ public:
 	IOperand * operator/(const IOperand &rhs) const override {}
 	IOperand * operator%(const IOperand &rhs) const override {}
 
-}
+};
 
-class Double
+class Double: IOperand
 {
 private:
 	double value;
+	std::string strValue;
 
 public:
-	std::string const& toString() const override {}
+	Double(double val) : value(val), strValue(std::to_string(val)) {}
+
+	std::string const& toString() const override {
+		return strValue;
+	}
 
 	int getPrecision() const override {}
 	eOperandType getType() const override {}
@@ -124,7 +150,7 @@ public:
 	IOperand * operator/(const IOperand &rhs) const override {}
 	IOperand * operator%(const IOperand &rhs) const override {}
 
-}
+};
 
 
 #endif

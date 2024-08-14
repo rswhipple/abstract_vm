@@ -29,7 +29,7 @@ void readFromStdin(const t_node*& cmdPtr)
 
 void strToNode(std::string line)
 {
-
+    
 }
 
 // t_node *read_file(FILE *fp, t_header **header, t_prog_size *size) {
