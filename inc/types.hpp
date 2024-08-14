@@ -11,7 +11,32 @@ struct t_node {
     t_node* next;
 };
 
+enum class eOperandType
+{
+  int8,
+  int16,
+  int32,
+  Float,
+  Double,
+};
 
+class Executor
+{
+  private:
+    IOperand _createint8(const std::string& value) {}
+    IOperand _createint16(const std::string& value) {}
+    IOperand _createint32(const std::string& value) {}
+    IOperand _createFloat(const std::string& value) {}
+    IOperand _createDouble(const std::string& value) {}
+
+    typedef (*CreateOperand)(const std::string&);
+
+    CreateOperand createOperand[] = {_createint8, _createint16, _createint32, _createFloat, _createDouble};    
+
+  public:
+    IOperand * createOperand(eOperandType type, const std::string& value) {}
+
+}
 
 // future iteration: using a template
 class IOperand
