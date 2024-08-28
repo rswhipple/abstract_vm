@@ -29,7 +29,7 @@ class Executor
     IOperand _createFloat(const std::string& value) {}
     IOperand _createDouble(const std::string& value) {}
 
-    typedef (*CreateOperand)(const std::string&);
+    typedef IOperand (*CreateOperand)(const std::string&);
 
     CreateOperand createOperand[] = {_createint8, _createint16, _createint32, _createFloat, _createDouble};    
 
@@ -57,14 +57,14 @@ public:
   virtual ~IOperand() {}
 };
 
-class Int8: public IOperand
+class int8: public IOperand
 {
 private:
 	int8_t value;
 	std::string strValue;
 
 public:
-	Int8(int8_t val) : value(val), strValue(std::to_string(val)) {}
+	int8(int8_t val) : value(val), strValue(std::to_string(val)) {}
 
 	std::string const & toString() const override {
 		return strValue;
@@ -81,14 +81,14 @@ public:
 
 };
 
-class Int16: IOperand
+class int16: public IOperand
 {
 private:
 	int16_t value;
 	std::string strValue;
 
 public:
-	Int16(int16_t val) : value(val), strValue(std::to_string(val)) {}
+	int16(int16_t val) : value(val), strValue(std::to_string(val)) {}
 
 	std::string const& toString() const override {
 		return strValue;
@@ -105,14 +105,14 @@ public:
 
 };
 
-class Int32: IOperand
+class int32: public IOperand
 {
 private:
 	int32_t value;
 	std::string strValue;
 
 public:
-	Int32(int32_t val) : value(val), strValue(std::to_string(val)) {}
+	int32(int32_t val) : value(val), strValue(std::to_string(val)) {}
 
 	std::string const& toString() const override {
 		return strValue;
@@ -129,7 +129,7 @@ public:
 
 };
 
-class Float: IOperand
+class Float: public IOperand
 {
 private:
 	float value;
@@ -153,7 +153,7 @@ public:
 
 };
 
-class Double: IOperand
+class Double: public IOperand
 {
 private:
 	double value;

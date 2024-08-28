@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <unordered_set>
@@ -40,7 +41,7 @@ bool startsWithAny(const std::string& str, const std::unordered_set<std::string>
   return false;
 }
 
-int isValidInstruction(const std::string& line){
+int isValidInstruction(const std::string& line) {
 
   int spaceCount;
   if ((spaceCount = std::count(line.begin(), line.end(), ' ')) > 1){
@@ -55,14 +56,14 @@ int isValidInstruction(const std::string& line){
   // triple nested if statements :'(
 	if (instructionList.find(str1) != instructionList.end()) {
 
-		if (str1 == "push" || str1 == "assert") {
+	 		if (str1 == "push" || str1 == "assert") {
 		  ss >> str2;
 		  if (startsWithAny(str2, valueList)) {
-        std::cout << "Complete instruction: " << str1 << " " << str2 << std::endl;
+        std::cout << "Valid instruction: " << str1 << " " << str2 << std::endl;
         return 0;
 		  }
 		} else if (spaceCount == 0) {
-      std::cout << "Complete instruction: " << str1 << std::endl;
+      std::cout << "Valid instruction: " << str1 << std::endl;
       return 0;
     }
     
@@ -77,6 +78,9 @@ int readFromStdin()
 	{
 		std::string input;
 		std::getline(std::cin, input);
+		if (input == "exit") {
+		  return 0;
+		}
     if (isValidInstruction(input)) {
       return 1;
     }
@@ -85,7 +89,22 @@ int readFromStdin()
 }
 
 int readFromFile(const std::string& fileName){
-  std::cout << "The name of the file is " << fileName << std::endl;
+  std::ifstream inputFile(fileName);
+
+  if (!inputFile.is_open()) {
+    std::cerr << "Error opening file." << std::endl;
+    return 1;
+  }
+
+  std::string line;
+  while (std::getline(inputFile, line)) {
+    if (line == "exit") {
+      return 0;
+    }
+    if (isValidInstruction(line)) {
+      return 1;
+    }
+  }
   return 0;
 }
 
