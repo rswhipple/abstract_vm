@@ -41,50 +41,48 @@ bool startsWithAny(const std::string& str, const std::unordered_set<std::string>
   return false;
 }
 
-int isValidInstruction(const std::string& line) {
+bool isValidInstruction(const std::string& line) {
 
   int spaceCount;
   if ((spaceCount = std::count(line.begin(), line.end(), ' ')) > 1){
     std::cerr << "Error: Invalid instruction" << std::endl;
-    return 1;
+    return false;
   }
  
 	std::string str1, str2;
 	std::stringstream ss(line);
 	ss >> str1;
 
-  // triple nested if statements :'(
 	if (instructionList.find(str1) != instructionList.end()) {
 
 	 		if (str1 == "push" || str1 == "assert") {
 		  ss >> str2;
 		  if (startsWithAny(str2, valueList)) {
         std::cout << "Valid instruction: " << str1 << " " << str2 << std::endl;
-        return 0;
+        return true;
 		  }
 		} else if (spaceCount == 0) {
       std::cout << "Valid instruction: " << str1 << std::endl;
-      return 0;
+      return true;
     }
     
 	}
   std::cerr << "Error: Invalid instruction" << std::endl;
-  return 1;
+  return false;
 }
 
 int readFromStdin() 
 {
-	while (1)
-	{
+	while (1) {
 		std::string input;
 		std::getline(std::cin, input);
-		if (input == "exit") {
+		if (input == ";;") {
 		  return 0;
 		}
-    if (isValidInstruction(input)) {
+    if (!isValidInstruction(input)) {
       return 1;
     }
-	}
+  }
 	return 0;
 }
 
@@ -101,7 +99,7 @@ int readFromFile(const std::string& fileName){
     if (line == "exit") {
       return 0;
     }
-    if (isValidInstruction(line)) {
+    if (!isValidInstruction(line)) {
       return 1;
     }
   }
@@ -119,9 +117,13 @@ int main(int argc, char* argv[])
         std::cerr << "Usage: " << argv[0] << " [filename]" << std::endl;
         return EXIT_FAILURE;  
     } else if (argc > 1) {
-        readFromFile(argv[1]);
+        if (readFromFile(argv[1]) != 0) {
+          return EXIT_FAILURE;
+        }
     } else {
-        readFromStdin();
+        if (readFromStdin() != 0) {
+          return EXIT_FAILURE;
+        }
     }
 
     return EXIT_SUCCESS;
