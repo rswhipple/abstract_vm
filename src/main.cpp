@@ -32,7 +32,8 @@ std::unordered_set<std::string> valueList =
   "double"
 };
 
-bool startsWithAny(const std::string& str, const std::unordered_set<std::string>& prefixes) {
+// improve this later
+bool isValidValue(const std::string& str, const std::unordered_set<std::string>& prefixes) {
   for (const auto& prefix : prefixes) {
     if (str.find(prefix) == 0) {
       return true;
@@ -55,9 +56,9 @@ bool isValidInstruction(const std::string& line) {
 
 	if (instructionList.find(str1) != instructionList.end()) {
 
-	 		if (str1 == "push" || str1 == "assert") {
+	 	if (str1 == "push" || str1 == "assert") {
 		  ss >> str2;
-		  if (startsWithAny(str2, valueList)) {
+		  if (isValidValue(str2, valueList)) {
         std::cout << "Valid instruction: " << str1 << " " << str2 << std::endl;
         return true;
 		  }
@@ -82,6 +83,7 @@ int readFromStdin()
     if (!isValidInstruction(input)) {
       return 1;
     }
+    // run instruction here
   }
 	return 0;
 }
@@ -102,6 +104,7 @@ int readFromFile(const std::string& fileName){
     if (!isValidInstruction(line)) {
       return 1;
     }
+    // run instruction here
   }
   return 0;
 }
