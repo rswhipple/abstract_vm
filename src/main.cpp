@@ -52,26 +52,23 @@ int isValidInstruction(const std::string& line){
 	std::stringstream ss(line);
 	ss >> str1;
 
+  // triple nested if statements :'(
 	if (instructionList.find(str1) != instructionList.end()) {
 
-		if (str1 != "push" && str1 != "assert" && spaceCount < 1) {
-			std::cout << "Complete instruction: " << str1 << std::endl;
-			return 0;
-		}
-
-    ss >> str2;
-    if (startsWithAny(str2, valueList)) {
-      std::cout << "Complete instruction: " << str1 << str2 << std::endl;
+		if (str1 == "push" || str1 == "assert") {
+		  ss >> str2;
+		  if (startsWithAny(str2, valueList)) {
+        std::cout << "Complete instruction: " << str1 << " " << str2 << std::endl;
+        return 0;
+		  }
+		} else if (spaceCount == 0) {
+      std::cout << "Complete instruction: " << str1 << std::endl;
       return 0;
-    } else {
-      std::cerr << "Error: Invalid instruction" << std::endl;
-      return 1;
     }
     
 	}
-
   std::cerr << "Error: Invalid instruction" << std::endl;
-  return 1; 
+  return 1;
 }
 
 int readFromStdin() 
