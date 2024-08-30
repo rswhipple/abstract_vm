@@ -1,13 +1,5 @@
-#include <stdlib.h>
 
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <unordered_set>
-#include <string>
-#include <algorithm>
 #include "../inc/main.hpp"
-
 
 
 int main(int argc, char* argv[])
