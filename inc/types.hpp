@@ -28,13 +28,26 @@ std::unordered_set<std::string> valueList =
   "double"
 };
 
-typedef struct s_node t_node;
+class Instruction {
+private:
+    std::string command;
+    std::string type;
+    std::string value;
 
-struct t_node {
-    const char* command;
-    int type;
-    int value;
-    t_node* next;
+public:
+	// Constructor
+	Instruction(const std::string& cmd, const std::string& typ,
+		const std::string& val)
+		: command(cmd), type(typ), value(val) {}
+
+	std::string getCommand() const { return command; }
+	void setCommand(const std::string& cmd) { command = cmd; }
+
+	std::string getType() const { return type; }
+	void setType(const std::string& typ) { type = typ; }
+
+	std::string getValue() const { return value; }
+	void setValue(const std::string& val) { value = val; }
 };
 
 enum class eOperandType
@@ -48,7 +61,7 @@ enum class eOperandType
 
 class Executor
 {
-  private:
+private:
 	IOperand* _createint8(const std::string& value) {}
 	IOperand* _createint16(const std::string& value) {}
 	IOperand* _createint32(const std::string& value) {}
@@ -66,7 +79,7 @@ class Executor
 		&Executor::_createDouble
 	}; 
 
-  public:
+public:
 	IOperand* createOperand(eOperandType type, const std::string& value) {
 			return (this->*createOperand[static_cast<size_t>(type)])(value);
 		}
