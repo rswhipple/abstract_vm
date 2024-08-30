@@ -11,6 +11,6 @@ bool isValidInstruction(const std::string& line);   // Validate instr format
 bool isValidValue(const std::string& str, const std::unordered_set<std::string>& prefixes);     // Validate instr prefix
 bool splitTypeValue (const std::string& input, const std::string& type, const std::string& value);
 int tokenize(std::string line, Instruction& inst);
-int executeCmd(Instruction& inst);
+int executeCmd(std::vector<Instruction> commands);
 
 #endif

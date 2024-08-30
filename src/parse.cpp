@@ -11,37 +11,41 @@ int readFile(const std:: string& filename)
         return EXIT_FAILURE;
     }
 
+    std::vector<Instruction> commands;
     Instruction inst = {"temp", "temp", "temp"};
 
     std::string line;
     while (std::getline(file, line)) {
         if (line == "exit") {
             file.close();
+            if (executeCmd(commands) != 0) return EXIT_FAILURE;
             return EXIT_SUCCESS;
         }
         if (!isValidInstruction(line)) return EXIT_FAILURE;
         if (tokenize(line, inst) != 0) return EXIT_FAILURE;
-        executeCmd(inst);
-        std::cout << line << std::endl;
+        commands.emplace_back(inst);
     }
 
     file.close();
-    return EXIT_SUCCESS;
+    return EXIT_FAILURE;
 }
 
 int readFromStdin()
 {
+    std::vector<Instruction> commands;
     Instruction inst = {"temp", "temp", "temp"};
 
     std::string line;
     while (std::getline(std::cin, line)) {
-        if (line == ";;") return EXIT_SUCCESS;
+        if (line == ";;") {
+            if (executeCmd(commands) != 0) return EXIT_FAILURE;
+            return EXIT_SUCCESS;
+        }
         if (!isValidInstruction(line)) return EXIT_FAILURE;
         if (tokenize(line, inst) != 0) return EXIT_FAILURE;
-        executeCmd(inst);
-        std::cout << line << std::endl;
+        commands.emplace_back(inst);
     }
-    return EXIT_SUCCESS;
+    return EXIT_FAILURE;
 }
 
 
@@ -115,8 +119,6 @@ int tokenize(std::string line, Instruction& inst)
     inst.setCommand(tokens[0]);
 
     if (splitTypeValue(tokens[1], type, value)) {
-        std::cout << "Type: " << type << std::endl;
-        std::cout << "Value: " << value << std::endl;
         inst.setType(type);
         inst.setValue(value);
     } else {
@@ -127,7 +129,7 @@ int tokenize(std::string line, Instruction& inst)
     return EXIT_SUCCESS;
 }
 
-int executeCmd(Instruction& inst) 
+int executeCmd(std::vector<Instruction> commands) 
 {
     // execute the command here
 }
