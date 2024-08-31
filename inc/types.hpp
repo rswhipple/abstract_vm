@@ -6,7 +6,7 @@
 template <typename T>
 void mark_unused(T&&) {}
 
-extern const std::array<std::string, 12> instructionList;
+extern const std::array<std::string, 13> instructionList;
 
 extern const std::array<std::string, 5> valueList;
 

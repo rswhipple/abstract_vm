@@ -1,7 +1,7 @@
 
 #include "../inc/main.hpp"
 
-const std::array<std::string, 12> instructionList = {
+const std::array<std::string, 13> instructionList = {
 	"push",	
 	"pop", 
 	"dump",
@@ -13,7 +13,8 @@ const std::array<std::string, 12> instructionList = {
 	"mod",
 	"print",
 	"exit",
-	";;"
+	";;",
+    ";"
 };
 
 const std::array<std::string, 5> valueList = {
