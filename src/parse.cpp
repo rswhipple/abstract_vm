@@ -2,77 +2,135 @@
 #include "../inc/main.hpp"
 
 
-void readFile(const std:: string& filename, const t_node*& cmdPtr)
+int readFile(const std:: string& filename)
 {
     std::ifstream file(filename);
 
     if (!file.is_open()) {
         std::cerr << "Error: Could not open file" << filename << std::endl;
+        return EXIT_FAILURE;
     }
+
+    std::vector<Instruction> commands;
+    Instruction inst = {"temp", "temp", "temp"};
 
     std::string line;
     while (std::getline(file, line)) {
-        strToNode(line);
-        std::cout << line << std::endl;
+        if (line == "exit") {
+            file.close();
+            if (executeCmd(commands) != 0) return EXIT_FAILURE;
+            return EXIT_SUCCESS;
+        }
+        if (!isValidInstruction(line)) return EXIT_FAILURE;
+        if (tokenize(line, inst) != 0) return EXIT_FAILURE;
+        commands.emplace_back(inst);
     }
 
     file.close();
+    return EXIT_FAILURE;
 }
 
-void readFromStdin(const t_node*& cmdPtr)
+int readFromStdin()
 {
+    std::vector<Instruction> commands;
+    Instruction inst = {"temp", "temp", "temp"};
+
     std::string line;
     while (std::getline(std::cin, line)) {
-        std::cout << line << std::endl;
+        if (line == ";;") {
+            if (executeCmd(commands) != 0) return EXIT_FAILURE;
+            return EXIT_SUCCESS;
+        }
+        if (!isValidInstruction(line)) return EXIT_FAILURE;
+        if (tokenize(line, inst) != 0) return EXIT_FAILURE;
+        commands.emplace_back(inst);
     }
+    return EXIT_FAILURE;
 }
 
-void strToNode(std::string line)
+
+// improve this later
+bool isValidValue(const std::string& str, const std::array<std::string, 5>& prefixes) 
 {
-    
+    for (const auto& prefix : prefixes) {
+        if (str.find(prefix) == 0) {
+        return true;
+        }
+    }
+    return false;
 }
 
-// t_node *read_file(FILE *fp, t_header **header, t_prog_size *size) {
-//     char *line = NULL;
-//     size_t len = 0;
-//     ssize_t nread;
-//     t_node *head = NULL;
+bool isValidInstruction(const std::string& line) 
+{
+    int spaceCount;
+    if ((spaceCount = std::count(line.begin(), line.end(), ' ')) > 1){
+        std::cerr << "Error: Invalid instruction" << std::endl;
+        return false;
+    }
+    
+    std::string str1, str2;
+    std::stringstream ss(line);
+    ss >> str1;
 
-//     while ((nread = getline(&line, &len, fp)) != -1) {
-//         if (my_strncmp(line, NAME_CMD_STRING, 5) == 0) { 
-//             remove_line_title((*header)->prog_name, line, 7);
-//         }
-//         else if (my_strncmp(line, COMMENT_CMD_STRING, 8) == 0) { 
-//             remove_line_title((*header)->comment, line, 10);
-//         } 
-//         else if (nread == 1 || my_strncmp(line, "/n", 1) == 0) {
-//             continue;
-//         } 
-//         else {
-//             size->num_inst++;
-//             if (line[nread - 1] == '\n') line[nread - 1] = '\0';
+    if (std::find(instructionList.begin(), instructionList.end(), str1) != instructionList.end()) {
+        if (str1 == "push" || str1 == "assert") {
+            ss >> str2;
+            if (isValidValue(str2, valueList)) {
+                std::cout << "Valid instruction: " << str1 << " " << str2 << std::endl;
+                return true;
+            }
+        } else if (spaceCount == 0) {
+            std::cout << "Valid instruction: " << str1 << std::endl;
+            return true;
+        }
+    
+    }
+    std::cerr << "Error: Invalid instruction" << std::endl;
+    return false;
+}
 
-//             if (!head) {
-//                 head = string_to_node(line, size);
-//                 head->id = size->num_inst;
-//             } else {
-//                 t_node *tmp = head;
-//                 while (tmp->next) tmp = tmp->next;
-//                 tmp->next = string_to_node(line, size);
-//                 tmp->next->id = size->num_inst;
+bool splitTypeValue (const std::string& input, std::string& type, std::string& value)
+{
+    size_t openPos = input.find('(');
+    size_t closePos = input.find('(', openPos);
 
-//                 // calculate offset
-//                 if (tmp->next->id == 2) {
-//                     tmp->next->offset += tmp->num_bytes;
-//                 } else {
-//                     tmp->next->offset += tmp->num_bytes + tmp->offset;
-//                 }
-//             }
-//         }
-//     }
-//     print_nodes(head);  // TESTING
-//     return head;
-// }
+    if (openPos != std::string::npos && closePos != std::string::npos && closePos > openPos) {
+        type = input.substr(0, openPos);    // Text before '('
+        value = input.substr(openPos + 1, closePos - openPos - 1); // Text between '(' and ')'
+        return true;
+    }
 
+    return false;
+}
 
+int tokenize(std::string line, Instruction& inst)
+{
+    std::stringstream ss(line);
+    std::string tok;
+    std::vector<std::string> tokens;
+    std::string type;
+    std::string value;
 
+    while (ss >> tok) {
+        tokens.push_back(tok);
+    }
+
+    inst.setCommand(tokens[0]);
+
+    if (splitTypeValue(tokens[1], type, value)) {
+        inst.setType(type);
+        inst.setValue(value);
+    } else {
+        std::cerr << "Invalid input format." << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
+int executeCmd(std::vector<Instruction> commands) 
+{
+    mark_unused(commands);
+    return EXIT_SUCCESS;
+    // execute the command here
+}
