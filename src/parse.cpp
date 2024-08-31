@@ -23,6 +23,7 @@ int readFile(const std:: string& filename)
         }
         if (!isValidInstruction(line)) return EXIT_FAILURE;
         if (tokenize(line, inst) != 0) return EXIT_FAILURE;
+        if (inst.getCommand() == ";") continue;     // Skips storing a comment.
         commands.emplace_back(inst);
     }
 
@@ -60,6 +61,16 @@ bool isValidValue(const std::string& str, const std::array<std::string, 5>& pref
     return false;
 }
 
+bool isValidCommand(const std::string& str, const std::array<std::string, 13>& commands) 
+{
+    for (const auto& command : commands) {
+        if (str.find(command) == 0) {
+        return true;
+        }
+    }
+    return false;
+}
+
 bool isValidInstruction(const std::string& line) 
 {
     int spaceCount;
@@ -72,18 +83,20 @@ bool isValidInstruction(const std::string& line)
     std::stringstream ss(line);
     ss >> str1;
 
-    if (std::find(instructionList.begin(), instructionList.end(), str1) != instructionList.end()) {
+    if (isValidCommand(str1, instructionList)) {
         if (str1 == "push" || str1 == "assert") {
             ss >> str2;
             if (isValidValue(str2, valueList)) {
                 std::cout << "Valid instruction: " << str1 << " " << str2 << std::endl;
                 return true;
             }
-        } else if (spaceCount == 0) {
+        } else if (str1 == ";") {
+            std::cout << "Valid instruction: " << str1 << std::endl;
+            return true;
+        } else if (spaceCount == 0 ) {
             std::cout << "Valid instruction: " << str1 << std::endl;
             return true;
         }
-    
     }
     std::cerr << "Error: Invalid instruction" << std::endl;
     return false;
@@ -117,12 +130,17 @@ int tokenize(std::string line, Instruction& inst)
 
     inst.setCommand(tokens[0]);
 
-    if (splitTypeValue(tokens[1], type, value)) {
-        inst.setType(type);
-        inst.setValue(value);
+    if (tokens[0] == "push" || tokens[0] == "assert") {
+        if (splitTypeValue(tokens[1], type, value)) {
+            inst.setType(type);
+            inst.setValue(value);
+        } else {
+            std::cerr << "Invalid input format." << std::endl;
+            return EXIT_FAILURE;
+        }
     } else {
-        std::cerr << "Invalid input format." << std::endl;
-        return EXIT_FAILURE;
+        inst.setType("");
+        inst.setValue("");
     }
 
     return EXIT_SUCCESS;
