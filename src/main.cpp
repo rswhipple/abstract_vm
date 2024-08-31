@@ -1,6 +1,28 @@
 
 #include "../inc/main.hpp"
 
+const std::array<std::string, 12> instructionList = {
+	"push",	
+	"pop", 
+	"dump",
+	"assert",
+	"add",
+	"sub",
+	"mul",
+	"div",
+	"mod",
+	"print",
+	"exit",
+	";;"
+};
+
+const std::array<std::string, 5> valueList = {
+  "int8",
+  "int16",
+  "int32",
+  "float",
+  "double"
+};
 
 int main(int argc, char* argv[])
 {

@@ -1,32 +1,14 @@
 #ifndef TYPES_HPP
 #define TYPES_HPP
 
-#include <unordered_set>
+#include <iostream>
 
-std::unordered_set<std::string> instructionList =
-{
-	"push",	
-	"pop", 
-	"dump",
-	"assert",
-	"add",
-	"sub",
-	"mul",
-	"div",
-	"mod",
-	"print",
-	"exit",
-	";;"
-};
+template <typename T>
+void mark_unused(T&&) {}
 
-std::unordered_set<std::string> valueList =
-{
-  "int8",
-  "int16",
-  "int32",
-  "float",
-  "double"
-};
+extern const std::array<std::string, 12> instructionList;
+
+extern const std::array<std::string, 5> valueList;
 
 class Instruction {
 private:
@@ -59,32 +41,6 @@ enum class eOperandType
   Double,
 };
 
-class Executor
-{
-private:
-	IOperand* _createint8(const std::string& value) {}
-	IOperand* _createint16(const std::string& value) {}
-	IOperand* _createint32(const std::string& value) {}
-	IOperand* _createFloat(const std::string& value) {}
-	IOperand* _createDouble(const std::string& value) {}
-
-	typedef IOperand* (Executor::*CreateOperand)(const std::string&);
-
-	// Array of member function pointers
-	std::array<CreateOperand, 5> createOperand = {
-		&Executor::_createint8,
-		&Executor::_createint16,
-		&Executor::_createint32,
-		&Executor::_createFloat,
-		&Executor::_createDouble
-	}; 
-
-public:
-	IOperand* createOperand(eOperandType type, const std::string& value) {
-			return (this->*createOperand[static_cast<size_t>(type)])(value);
-		}
-
-};
 
 // future iteration: using a template
 class IOperand
@@ -105,126 +61,172 @@ public:
   virtual ~IOperand() {}
 };
 
-class int8: public IOperand
-{
-private:
-	int8_t value;
-	std::string strValue;
+// class int8: public IOperand
+// {
+// private:
+// 	int8_t value;
+// 	std::string strValue;
 
-public:
-	int8(int8_t val) : value(val), strValue(std::to_string(val)) {}
+// public:
+// 	int8(int8_t val) : value(val), strValue(std::to_string(val)) {}
 
-	std::string const & toString() const override {
-		return strValue;
-	}
+// 	std::string const & toString() const override {
+// 		return strValue;
+// 	}
 
-	int getPrecision() const override {}
-	eOperandType getType() const override {}
+// 	// int getPrecision() const override {}
+// 	// eOperandType getType() const override {}
 
-	IOperand * operator+(const IOperand &rhs) const override {}
-	IOperand * operator-(const IOperand &rhs) const override {}
-	IOperand * operator*(const IOperand &rhs) const override {}
-	IOperand * operator/(const IOperand &rhs) const override {}
-	IOperand * operator%(const IOperand &rhs) const override {}
+// 	IOperand * operator+(const IOperand &rhs) const override {
+// 		return nullptr;
+// 	}
+// 	IOperand * operator-(const IOperand &rhs) const override {
+// 		return nullptr;
+// 	}
+// 	IOperand * operator*(const IOperand &rhs) const override {
+// 		return nullptr;
+// 	}
+// 	IOperand * operator/(const IOperand &rhs) const override {
+// 		return nullptr;
+// 	}
+// 	IOperand * operator%(const IOperand &rhs) const override {
+// 		return nullptr;
+// 	}
 
-};
+// };
 
-class int16: public IOperand
-{
-private:
-	int16_t value;
-	std::string strValue;
+// class int16: public IOperand
+// {
+// private:
+// 	int16_t value;
+// 	std::string strValue;
 
-public:
-	int16(int16_t val) : value(val), strValue(std::to_string(val)) {}
+// public:
+// 	int16(int16_t val) : value(val), strValue(std::to_string(val)) {}
 
-	std::string const& toString() const override {
-		return strValue;
-	}
+// 	std::string const& toString() const override {
+// 		return strValue;
+// 	}
 
-	int getPrecision() const override {}
-	eOperandType getType() const override {}
+// 	int getPrecision() const override {}
+// 	eOperandType getType() const override {}
 
-	IOperand * operator+(const IOperand &rhs) const override {}
-	IOperand * operator-(const IOperand &rhs) const override {}
-	IOperand * operator*(const IOperand &rhs) const override {}
-	IOperand * operator/(const IOperand &rhs) const override {}
-	IOperand * operator%(const IOperand &rhs) const override {}
+// 	IOperand * operator+(const IOperand &rhs) const override {}
+// 	IOperand * operator-(const IOperand &rhs) const override {}
+// 	IOperand * operator*(const IOperand &rhs) const override {}
+// 	IOperand * operator/(const IOperand &rhs) const override {}
+// 	IOperand * operator%(const IOperand &rhs) const override {}
 
-};
+// };
 
-class int32: public IOperand
-{
-private:
-	int32_t value;
-	std::string strValue;
+// class int32: public IOperand
+// {
+// private:
+// 	int32_t value;
+// 	std::string strValue;
 
-public:
-	int32(int32_t val) : value(val), strValue(std::to_string(val)) {}
+// public:
+// 	int32(int32_t val) : value(val), strValue(std::to_string(val)) {}
 
-	std::string const& toString() const override {
-		return strValue;
-	}
+// 	std::string const& toString() const override {
+// 		return strValue;
+// 	}
 
-	int getPrecision() const override {}
-	eOperandType getType() const override {}
+// 	int getPrecision() const override {}
+// 	eOperandType getType() const override {}
 
-	IOperand * operator+(const IOperand &rhs) const override {}
-	IOperand * operator-(const IOperand &rhs) const override {}
-	IOperand * operator*(const IOperand &rhs) const override {}
-	IOperand * operator/(const IOperand &rhs) const override {}
-	IOperand * operator%(const IOperand &rhs) const override {}
+// 	IOperand * operator+(const IOperand &rhs) const override {}
+// 	IOperand * operator-(const IOperand &rhs) const override {}
+// 	IOperand * operator*(const IOperand &rhs) const override {}
+// 	IOperand * operator/(const IOperand &rhs) const override {}
+// 	IOperand * operator%(const IOperand &rhs) const override {}
 
-};
+// };
 
-class Float: public IOperand
-{
-private:
-	float value;
-	std::string strValue;
+// class Float: public IOperand
+// {
+// private:
+// 	float value;
+// 	std::string strValue;
 
-public:
-	Float(float val) : value(val), strValue(std::to_string(val)) {}
+// public:
+// 	Float(float val) : value(val), strValue(std::to_string(val)) {}
 
-	std::string const& toString() const override {
-		return strValue;
-	}
+// 	std::string const& toString() const override {
+// 		return strValue;
+// 	}
 
-	int getPrecision() const override {}
-	eOperandType getType() const override {}
+// 	int getPrecision() const override {}
+// 	eOperandType getType() const override {}
 
-	IOperand * operator+(const IOperand &rhs) const override {}
-	IOperand * operator-(const IOperand &rhs) const override {}
-	IOperand * operator*(const IOperand &rhs) const override {}
-	IOperand * operator/(const IOperand &rhs) const override {}
-	IOperand * operator%(const IOperand &rhs) const override {}
+// 	IOperand * operator+(const IOperand &rhs) const override {}
+// 	IOperand * operator-(const IOperand &rhs) const override {}
+// 	IOperand * operator*(const IOperand &rhs) const override {}
+// 	IOperand * operator/(const IOperand &rhs) const override {}
+// 	IOperand * operator%(const IOperand &rhs) const override {}
 
-};
+// };
 
-class Double: public IOperand
-{
-private:
-	double value;
-	std::string strValue;
+// class Double: public IOperand
+// {
+// private:
+// 	double value;
+// 	std::string strValue;
 
-public:
-	Double(double val) : value(val), strValue(std::to_string(val)) {}
+// public:
+// 	Double(double val) : value(val), strValue(std::to_string(val)) {}
 
-	std::string const& toString() const override {
-		return strValue;
-	}
+// 	std::string const& toString() const override {
+// 		return strValue;
+// 	}
 
-	int getPrecision() const override {}
-	eOperandType getType() const override {}
+// 	int getPrecision() const override { return EXIT_FAILURE; }
+// 	eOperandType getType() const override {}
 
-	IOperand * operator+(const IOperand &rhs) const override {}
-	IOperand * operator-(const IOperand &rhs) const override {}
-	IOperand * operator*(const IOperand &rhs) const override {}
-	IOperand * operator/(const IOperand &rhs) const override {}
-	IOperand * operator%(const IOperand &rhs) const override {}
+// 	IOperand * operator+(const IOperand &rhs) const override {
+// 		return nullptr;
+// 	}
+// 	IOperand * operator-(const IOperand &rhs) const override {
+// 		return nullptr;
+// 	}
+// 	IOperand * operator*(const IOperand &rhs) const override {
+// 		return nullptr;
+// 	}
+// 	IOperand * operator/(const IOperand &rhs) const override {
+// 		return nullptr;
+// 	}
+// 	IOperand * operator%(const IOperand &rhs) const override {
+// 		return nullptr;
+// 	}
 
-};
+// };
 
+// class Executor
+// {
+// private:
+// 	IOperand* _createint8(const std::string& value) {}
+// 	IOperand* _createint16(const std::string& value) {}
+// 	IOperand* _createint32(const std::string& value) {}
+// 	IOperand* _createFloat(const std::string& value) {}
+// 	IOperand* _createDouble(const std::string& value) {}
+
+// 	typedef IOperand* (Executor::*CreateOperand)(const std::string&);
+
+// 	// Array of member function pointers
+// 	std::array<CreateOperand, 5> createOperand = {
+// 		&Executor::_createint8,
+// 		&Executor::_createint16,
+// 		&Executor::_createint32,
+// 		&Executor::_createFloat,
+// 		&Executor::_createDouble
+// 	}; 
+
+// public:
+// 	IOperand* createOperand(eOperandType type, const std::string& value) {
+// 			return (this->*createOperand[static_cast<size_t>(type)])(value);
+// 		}
+
+// };
 
 #endif
 

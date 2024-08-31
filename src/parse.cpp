@@ -50,7 +50,7 @@ int readFromStdin()
 
 
 // improve this later
-bool isValidValue(const std::string& str, const std::unordered_set<std::string>& prefixes) 
+bool isValidValue(const std::string& str, const std::array<std::string, 5>& prefixes) 
 {
     for (const auto& prefix : prefixes) {
         if (str.find(prefix) == 0) {
@@ -68,24 +68,23 @@ bool isValidInstruction(const std::string& line)
         return false;
     }
     
-        std::string str1, str2;
-        std::stringstream ss(line);
-        ss >> str1;
+    std::string str1, str2;
+    std::stringstream ss(line);
+    ss >> str1;
 
-        if (instructionList.find(str1) != instructionList.end()) {
-
-            if (str1 == "push" || str1 == "assert") {
-                ss >> str2;
-                if (isValidValue(str2, valueList)) {
-                    std::cout << "Valid instruction: " << str1 << " " << str2 << std::endl;
-                    return true;
-                }
-            } else if (spaceCount == 0) {
-                std::cout << "Valid instruction: " << str1 << std::endl;
+    if (std::find(instructionList.begin(), instructionList.end(), str1) != instructionList.end()) {
+        if (str1 == "push" || str1 == "assert") {
+            ss >> str2;
+            if (isValidValue(str2, valueList)) {
+                std::cout << "Valid instruction: " << str1 << " " << str2 << std::endl;
                 return true;
             }
-        
+        } else if (spaceCount == 0) {
+            std::cout << "Valid instruction: " << str1 << std::endl;
+            return true;
         }
+    
+    }
     std::cerr << "Error: Invalid instruction" << std::endl;
     return false;
 }
@@ -131,5 +130,7 @@ int tokenize(std::string line, Instruction& inst)
 
 int executeCmd(std::vector<Instruction> commands) 
 {
+    mark_unused(commands);
+    return EXIT_SUCCESS;
     // execute the command here
 }
