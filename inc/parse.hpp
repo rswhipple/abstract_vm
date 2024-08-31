@@ -4,6 +4,8 @@
 #include <unordered_set>
 #include <string>
 #include <sstream>
+#include <vector>
+#include <array>
 
 int readFile(const std:: string& filename); // Read file
 int readFromStdin(); // Read from stdin

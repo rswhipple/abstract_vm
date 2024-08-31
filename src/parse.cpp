@@ -92,7 +92,7 @@ bool isValidInstruction(const std::string& line)
 bool splitTypeValue (const std::string& input, std::string& type, std::string& value)
 {
     size_t openPos = input.find('(');
-    size_t closePos = input.find('(', openPos);
+    size_t closePos = input.find(')', openPos);
 
     if (openPos != std::string::npos && closePos != std::string::npos && closePos > openPos) {
         type = input.substr(0, openPos);    // Text before '('
