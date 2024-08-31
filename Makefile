@@ -1,31 +1,35 @@
-CC := gcc
+# Compiler and flags
 CXX := g++
-CXXFLAGS := -Wall -Wextra -Werror -fsanitize=address -g3
+CXXFLAGS := -std=c++11 -Wall -Wextra -Werror -Iinc
 
-# Using CURDIR to set the directories
-SRCDIR = $(CURDIR)/src
-INCDIR = $(CURDIR)/../inc
-BUILDDIR = $(CURDIR)/../build
-LIBDIR = $(BUILDDIR)/lib
-LIBRARY = $(LIBDIR)/libmyabstractvm.a
+# Directories
+SRCDIR := src
+INCDIR := inc
+BUILDDIR := build
+TARGET := abstract_vm
 
-# Recursively gather all source files
-SOURCES = $(shell find $(SRCDIR) -name '*.cpp')
-OBJECTS = $(patsubst $(SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SOURCES))
-INCLUDES = -I$(INCDIR)
+# Source and object files
+SOURCES := $(wildcard $(SRCDIR)/*.cpp)
+OBJECTS := $(patsubst $(SRCDIR)/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
 
-all: $(LIBRARY)
+# Default target
+all: $(TARGET)
 
-$(LIBRARY): $(OBJECTS)
-	@mkdir -p $(LIBDIR)
-	ar rcs $@ $^
+# Linking the executable
+$(TARGET): $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c -o $@ $<
+# Compiling source files to object files
+$(BUILDDIR)/%.o: $(SRCDIR)/%.cpp | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
+# Create build directory if it doesn't exist
+$(BUILDDIR):
+	@mkdir -p $(BUILDDIR)
+
+# Clean target to remove built files
 clean:
-	rm -f $(OBJECTS) $(LIBRARY)
+	rm -rf $(BUILDDIR) $(TARGET)
 
 # Phony targets
 .PHONY: all clean
