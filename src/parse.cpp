@@ -4,6 +4,7 @@
 
 int readFile(const std:: string& filename)
 {
+    // Open file stream
     std::ifstream file(filename);
 
     if (!file.is_open()) {
@@ -11,9 +12,11 @@ int readFile(const std:: string& filename)
         return EXIT_FAILURE;
     }
 
+    // Instanciate Instruction obj + create vector to store all instructions.
     std::vector<Instruction> commands;
     Instruction inst = {"temp", "temp", "temp"};
 
+    // Parse program line by line
     std::string line;
     while (std::getline(file, line)) {
         if (line == "exit") {
@@ -23,8 +26,8 @@ int readFile(const std:: string& filename)
         }
         if (!isValidInstruction(line)) return EXIT_FAILURE;
         if (tokenize(line, inst) != 0) return EXIT_FAILURE;
-        if (inst.getCommand() == ";") continue;     // Skips storing a comment.
-        commands.emplace_back(inst);
+        if (inst.getCommand() == ";") continue;     // Skips comments.
+        commands.emplace_back(inst);    // Store current inst in vector.
     }
 
     file.close();
@@ -33,9 +36,11 @@ int readFile(const std:: string& filename)
 
 int readFromStdin()
 {
+    // Instanciate Instruction obj + create vector to store all instructions.
     std::vector<Instruction> commands;
     Instruction inst = {"temp", "temp", "temp"};
 
+    // Parse program line by line
     std::string line;
     while (std::getline(std::cin, line)) {
         if (line == ";;") {
@@ -44,13 +49,14 @@ int readFromStdin()
         }
         if (!isValidInstruction(line)) return EXIT_FAILURE;
         if (tokenize(line, inst) != 0) return EXIT_FAILURE;
-        commands.emplace_back(inst);
+        if (inst.getCommand() == ";") continue;     // Skips comments.
+        commands.emplace_back(inst);    // Store current inst in vector.
     }
     return EXIT_FAILURE;
 }
 
 
-// improve this later
+// improve this later ?
 bool isValidValue(const std::string& str, const std::array<std::string, 5>& prefixes) 
 {
     for (const auto& prefix : prefixes) {
@@ -104,12 +110,12 @@ bool isValidInstruction(const std::string& line)
 
 bool splitTypeValue (const std::string& input, std::string& type, std::string& value)
 {
-    size_t openPos = input.find('(');
-    size_t closePos = input.find(')', openPos);
+    size_t open = input.find('(');
+    size_t close = input.find(')', open);
 
-    if (openPos != std::string::npos && closePos != std::string::npos && closePos > openPos) {
-        type = input.substr(0, openPos);    // Text before '('
-        value = input.substr(openPos + 1, closePos - openPos - 1); // Text between '(' and ')'
+    if (open != std::string::npos && close != std::string::npos && close > open) {
+        type = input.substr(0, open);    // Text before '('
+        value = input.substr(open + 1, close - open - 1); // Text between '(' and ')'
         return true;
     }
 
@@ -148,7 +154,7 @@ int tokenize(std::string line, Instruction& inst)
 
 int executeCmd(std::vector<Instruction> commands) 
 {
+    // execute the command here
     mark_unused(commands);
     return EXIT_SUCCESS;
-    // execute the command here
 }
