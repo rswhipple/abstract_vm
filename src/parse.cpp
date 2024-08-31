@@ -21,6 +21,7 @@ int readFile(const std:: string& filename)
     while (std::getline(file, line)) {
         if (line == "exit") {
             file.close();
+            // Execute all commands
             if (executeCmd(commands) != 0) return EXIT_FAILURE;
             return EXIT_SUCCESS;
         }
@@ -44,6 +45,7 @@ int readFromStdin()
     std::string line;
     while (std::getline(std::cin, line)) {
         if (line == ";;") {
+            // Execute all commands
             if (executeCmd(commands) != 0) return EXIT_FAILURE;
             return EXIT_SUCCESS;
         }
@@ -155,6 +157,7 @@ int tokenize(std::string line, Instruction& inst)
 int executeCmd(std::vector<Instruction> commands) 
 {
     // execute the command here
+    std::list <Number> stack;
     mark_unused(commands);
     return EXIT_SUCCESS;
 }

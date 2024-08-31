@@ -6,6 +6,8 @@
 template <typename T>
 void mark_unused(T&&) {}
 
+using Number = std::variant<int8_t, int16_t, int32_t, float, double>;
+
 extern const std::array<std::string, 13> instructionList;
 
 extern const std::array<std::string, 5> valueList;
