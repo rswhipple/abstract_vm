@@ -6,6 +6,7 @@
 template <typename T>
 void mark_unused(T&&) {}
 
+// Is Number needed or can we use the IOperand interface instead?
 using Number = std::variant<int8_t, int16_t, int32_t, float, double>;
 
 extern const std::array<std::string, 13> instructionList;
@@ -36,13 +37,27 @@ public:
 
 enum class eOperandType
 {
-  int8,
-  int16,
-  int32,
-  Float,
-  Double,
+	int8,
+	int16,
+	int32,
+	Float,
+	Double,
 };
 
+enum class Cmd
+{
+	Push,
+	Assert,
+	Pop, 
+	Dump,
+	Add,
+	Sub,
+	Mul,
+	Div,
+	Mod,
+	Print,
+	Exit,
+};
 
 // future iteration: using a template
 class IOperand

@@ -22,7 +22,7 @@ int readFile(const std:: string& filename)
         if (line == "exit") {
             file.close();
             // Execute all commands
-            if (executeCmd(commands) != 0) return EXIT_FAILURE;
+            if (execute(commands) != 0) return EXIT_FAILURE;
             return EXIT_SUCCESS;
         }
         if (!isValidInstruction(line)) return EXIT_FAILURE;
@@ -46,7 +46,7 @@ int readFromStdin()
     while (std::getline(std::cin, line)) {
         if (line == ";;") {
             // Execute all commands
-            if (executeCmd(commands) != 0) return EXIT_FAILURE;
+            if (execute(commands) != 0) return EXIT_FAILURE;
             return EXIT_SUCCESS;
         }
         if (!isValidInstruction(line)) return EXIT_FAILURE;
@@ -154,10 +154,3 @@ int tokenize(std::string line, Instruction& inst)
     return EXIT_SUCCESS;
 }
 
-int executeCmd(std::vector<Instruction> commands) 
-{
-    // execute the command here
-    std::list <Number> stack;
-    mark_unused(commands);
-    return EXIT_SUCCESS;
-}
