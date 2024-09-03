@@ -7,10 +7,7 @@ int readFile(const std:: string& filename)
     // Open file stream
     std::ifstream file(filename);
 
-    if (!file.is_open()) {
-        std::cerr << "Error: Could not open file" << filename << std::endl;
-        return EXIT_FAILURE;
-    }
+    if (!file.is_open()) return 2;
 
     // Instanciate Instruction obj + create vector to store all instructions.
     std::vector<Instruction> commands;

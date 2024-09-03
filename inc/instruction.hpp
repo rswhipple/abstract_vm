@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+
 class Instruction {
 private:
     std::string command;

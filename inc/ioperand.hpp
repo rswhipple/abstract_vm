@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <variant>
 
+
 enum class eOperandType
 {
 	Int8,
@@ -94,7 +95,8 @@ using FloatOperand = Operand<float, eOperandType::Float>;
 using DoubleOperand = Operand<double, eOperandType::Double>;
 
 
-using OperandVar = std::variant<Int8Operand, Int16Operand, Int32Operand, FloatOperand, DoubleOperand>;
+using OperandVar = std::variant<Int8Operand, Int16Operand, 
+        Int32Operand, FloatOperand, DoubleOperand>;
 
 // class Executor
 // {

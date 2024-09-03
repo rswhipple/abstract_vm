@@ -40,6 +40,7 @@ int execute(std::vector<Instruction> commands)
                 executeAssert(stack, commands[i].getType(), commands[i].getValue());
                 break;
             case Cmd::Pop:
+                if (stack.empty()) 
                 stack.pop_front();
                 // TODO Add error message if stack is empty
                 break;

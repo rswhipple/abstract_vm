@@ -4,6 +4,7 @@
 #include <vector>
 #include "instruction.hpp"
 
+
 int readFile(const std:: string& filename); // Read file
 int readFromStdin(); // Read from stdin
 bool isValidInstruction(const std::string& line);   // Validate instr format

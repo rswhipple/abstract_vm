@@ -1,5 +1,9 @@
+#ifndef ABSTRACTVM_HPP
+#define ABSTRACTVM_HPP
+
 #include "parse.hpp"
 #include "execute.hpp"
+#include "error_handler.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -7,6 +11,8 @@
 #include <stdlib.h>
 #include <sstream>
 #include <string>
+#include <stdexcept>
+
 
 template <typename T>
 void mark_unused(T&&) {}
@@ -30,3 +36,5 @@ enum class Cmd
 };
 
 Cmd stringToCmd(const std::string& instName);
+
+#endif
