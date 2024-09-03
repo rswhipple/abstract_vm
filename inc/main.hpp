@@ -11,14 +11,11 @@
 #include <stdlib.h>
 #include <sstream>
 #include <string>
-<<<<<<< HEAD
 #include <stdexcept>
 
-=======
 #include <unordered_map>
 #include <array>
 #include <algorithm>
->>>>>>> 849d7ca082ac69dabb4c161369e66c15fb44698f
 
 template <typename T>
 void mark_unused(T&&) {}
@@ -42,8 +39,5 @@ enum class Cmd
 };
 
 Cmd stringToCmd(const std::string& instName);
-<<<<<<< HEAD
 
 #endif
-=======
->>>>>>> 849d7ca082ac69dabb4c161369e66c15fb44698f

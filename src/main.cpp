@@ -1,6 +1,7 @@
 
 #include "../inc/main.hpp"
 
+
 const std::array<std::string, 13> instructionList = {
 	"push",	
 	"pop", 
