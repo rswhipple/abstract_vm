@@ -7,6 +7,9 @@
 #include <stdlib.h>
 #include <sstream>
 #include <string>
+#include <unordered_map>
+#include <array>
+#include <algorithm>
 
 template <typename T>
 void mark_unused(T&&) {}
