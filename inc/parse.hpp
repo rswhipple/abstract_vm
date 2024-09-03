@@ -2,6 +2,7 @@
 #define PARSE_HPP
 
 #include <vector>
+#include "instruction.hpp"
 
 int readFile(const std:: string& filename); // Read file
 int readFromStdin(); // Read from stdin
