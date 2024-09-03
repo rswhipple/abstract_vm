@@ -58,7 +58,6 @@ int readFromStdin()
 }
 
 
-// improve this later ?
 bool isValidValue(const std::string& str, const std::array<std::string, 5>& prefixes) 
 {
     for (const auto& prefix : prefixes) {

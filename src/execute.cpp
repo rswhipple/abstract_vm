@@ -77,7 +77,6 @@ void executeDump(std::list <OperandVar> stk)
 
 int executePush(std::list <OperandVar> stk, std::string typ, std::string val)
 {
-    // How do we add the numbers using the IOperand interface???
     mark_unused(stk);
     mark_unused(typ);
     mark_unused(val);
