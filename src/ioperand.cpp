@@ -7,6 +7,7 @@ eOperandType stringToType(const std::string& typStr) {
     else if (typStr == "int16") return eOperandType::Int16;
     else if (typStr == "int32") return eOperandType::Int32;
     else if (typStr == "float") return eOperandType::Float;
-    else if (typStr == "double") return eOperandType::Double;
-    else errorHandler(errorType::invalidArg);
+    else return eOperandType::Double;
+    // No error handling here, is there a way to fix? 
+    // Can't return a nullptr, don't want to create an enum just for errors
 }

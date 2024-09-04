@@ -41,6 +41,7 @@ class Operand : public IOperand
 private:
 	T value;
 	std::string strValue;
+
 	IOperand* _createint8(const std::string& value) {
         int8_t val = static_cast<int8_t>(std::stoi(value));
         return new Operand(val);
@@ -80,7 +81,6 @@ public:
         return (this->*constructors[static_cast<size_t>(type)])(value);
     }
 
-    
 	std::string const & toString() const override {
 		return strValue;
 	}
@@ -118,12 +118,109 @@ public:
 
 };
 
+
+template <>
+class Operand<float, eOperandType::Float> : public IOperand
+{
+private:
+	float value;
+	std::string strValue;
+
+public:
+    Operand(float val) : value(val), strValue(std::to_string(val)) {}
+
+	std::string const & toString() const override {
+		return strValue;
+	}
+
+	int getPrecision() const override {
+		return static_cast<int>(sizeof(float) * 8);
+	}
+	eOperandType getType() const override {
+		return eOperandType::Float;
+	}
+
+	IOperand * operator+(const IOperand &rhs) const override {
+		float rhsValue = static_cast<float>(std::stod(rhs.toString()));
+		return new Operand(value + rhsValue);
+	}
+
+	IOperand * operator-(const IOperand &rhs) const override {
+		float rhsValue = static_cast<float>(std::stod(rhs.toString()));
+		return new Operand(value - rhsValue);
+	}
+	IOperand * operator*(const IOperand &rhs) const override {
+		float rhsValue = static_cast<float>(std::stod(rhs.toString()));
+		return new Operand(value * rhsValue);
+	}
+	IOperand * operator/(const IOperand &rhs) const override {
+		float rhsValue = static_cast<float>(std::stod(rhs.toString()));
+        if (rhsValue == 0) throw std::runtime_error("Division by zero");
+		return new Operand(value / rhsValue);
+	}
+    IOperand * operator%(const IOperand &rhs) const override {
+        (void)rhs;
+        const std::string message = 
+            "Error: invalid operands of type 'float' to binary 'operator%'";
+		throw std::runtime_error(message);
+		return nullptr;
+	}
+};
+
+template <>
+class Operand<double, eOperandType::Double> : public IOperand
+{
+private:
+	float value;
+	std::string strValue;
+
+public:
+    Operand(double val) : value(val), strValue(std::to_string(val)) {}
+
+	std::string const & toString() const override {
+		return strValue;
+	}
+
+	int getPrecision() const override {
+		return static_cast<int>(sizeof(double) * 8);
+	}
+	eOperandType getType() const override {
+		return eOperandType::Double;
+	}
+
+	IOperand * operator+(const IOperand &rhs) const override {
+		double rhsValue = static_cast<double>(std::stod(rhs.toString()));
+		return new Operand(value + rhsValue);
+	}
+
+	IOperand * operator-(const IOperand &rhs) const override {
+		double rhsValue = static_cast<double>(std::stod(rhs.toString()));
+		return new Operand(value - rhsValue);
+	}
+	IOperand * operator*(const IOperand &rhs) const override {
+		double rhsValue = static_cast<double>(std::stod(rhs.toString()));
+		return new Operand(value * rhsValue);
+	}
+	IOperand * operator/(const IOperand &rhs) const override {
+		double rhsValue = static_cast<double>(std::stod(rhs.toString()));
+        if (rhsValue == 0) throw std::runtime_error("Division by zero");
+		return new Operand(value / rhsValue);
+	}
+    IOperand * operator%(const IOperand &rhs) const override {
+        (void)rhs;
+        const std::string message = 
+            "Error: invalid operands of type 'float' to binary 'operator%'";
+		throw std::runtime_error(message);
+		return nullptr;
+	}
+};
+
 // Overload << operator for use with cout
 template <typename T, eOperandType OperandType>
 std::ostream& operator<<(std::ostream& os, const Operand<T, OperandType>& operand) {
     os << operand.toString();
     return os;
-}
+};
 
 
 eOperandType stringToType(const std::string& typStr);

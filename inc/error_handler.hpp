@@ -12,6 +12,7 @@ enum class errorType
 	divideByZero,
 	emptyStack,
     stackUndeflow,
+    binary,
 };
 
 class AvmException : public std::runtime_error {
