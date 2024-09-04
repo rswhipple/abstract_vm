@@ -17,11 +17,13 @@
 #include <array>
 #include <algorithm>
 
-template <typename T>
-void mark_unused(T&&) {}
-
+/* 
+The 'instructionList' and 'valueList' arrays are used to validate the 
+instructions during parsing.
+*/
 extern const std::array<std::string, 13> instructionList;
 extern const std::array<std::string, 5> valueList;
+
 
 enum class Cmd
 {

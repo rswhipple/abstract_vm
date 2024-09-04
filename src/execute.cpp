@@ -47,7 +47,7 @@ int execute(std::vector<Instruction> commands)
                 executeDump(stack);
                 break;
             case Cmd::Print:
-                //Verifies that the value at the top of the stack is an 8 bits integer. 
+                // Verifies that the value at the top of the stack is an 8 bits integer. 
                 // (If not, see the instruction assert), then interprets it as an ASCII value and 
                 // displays the corresponding character on the standard output. ????
             case Cmd::Error:
@@ -94,16 +94,14 @@ int executePush(std::list <IOperand*> stk, std::string typ, std::string val)
 
 int executeAssert(std::list <IOperand*> stk, std::string typ, std::string val)
 {
-    mark_unused(stk);
-    mark_unused(typ);
-    mark_unused(val);
+    (void)stk;
+    (void)typ;
+    (void)val;
     return EXIT_SUCCESS;
 }
 
 int executeArithmetic(std::list <IOperand*> stk, Cmd op)
 {
-    mark_unused(op);
-
     if (static_cast<int>(stk.size()) < 2) return 6;   // errorType::stackUnderflow
 
     IOperand* operand = nullptr;

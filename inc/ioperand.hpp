@@ -16,6 +16,9 @@ enum class eOperandType
 	Double,
 };
 
+eOperandType stringToType(const std::string& typStr);
+
+
 class IOperand
 {
 public:
@@ -34,7 +37,12 @@ public:
   virtual ~IOperand() {}
 };
 
-
+/*
+Operand template:
+    Handles all possible IOperand types, with 2 noted exceptions.
+    Float and Double have specialized classes because they do not have a 
+    functional modulo '%' operator.
+*/
 template <typename T, eOperandType OperandType>
 class Operand : public IOperand
 {
@@ -167,6 +175,7 @@ public:
 	}
 };
 
+
 template <>
 class Operand<double, eOperandType::Double> : public IOperand
 {
@@ -222,7 +231,5 @@ std::ostream& operator<<(std::ostream& os, const Operand<T, OperandType>& operan
     return os;
 };
 
-
-eOperandType stringToType(const std::string& typStr);
 
 #endif
