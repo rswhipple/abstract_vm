@@ -2,6 +2,7 @@
 #define PARSE_HPP
 
 #include <vector>
+#include <array>
 #include "instruction.hpp"
 
 
