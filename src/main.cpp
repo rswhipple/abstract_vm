@@ -33,7 +33,8 @@ int main(int argc, char* argv[])
         else if (argc > 1) {
             int result = readFile(argv[1]);
             if (result != 0) errorHandler(static_cast<errorType>(result));
-        } else {
+        } 
+        else {
             int result = readFromStdin();
             if (result != 0) errorHandler(static_cast<errorType>(result));
         }

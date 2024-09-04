@@ -52,11 +52,6 @@ int execute(std::vector<Instruction> commands)
                 // displays the corresponding character on the standard output. ????
             case Cmd::Error:
                 return 3;   // errorType::instruction
-            case Cmd::Add:
-            case Cmd::Sub:
-            case Cmd::Mul:
-            case Cmd::Div:
-            case Cmd::Mod:
             default:
                 int result = executeArithmetic(stack, cmd);
                 return result;
@@ -80,25 +75,17 @@ int executePush(std::list <IOperand*> stk, std::string typ, std::string val)
     eOperandType type = stringToType(typ);
     IOperand* operand = nullptr;
 
-    switch (type) {
-        case eOperandType::Int8:
-            operand = new Operand<int8_t, eOperandType::Int8>(static_cast<int8_t>(std::stoi(val)));
-            break;
-        case eOperandType::Int16:
-            operand = new Operand<int16_t, eOperandType::Int16>(static_cast<int16_t>(std::stoi(val)));
-            break;
-        case eOperandType::Int32:
-            operand = new Operand<int32_t, eOperandType::Int32>(static_cast<int32_t>(std::stoi(val)));
-            break;
-        case eOperandType::Float:
-            operand = new Operand<float, eOperandType::Float>(std::stof(val));
-            break;
-        case eOperandType::Double:
-            operand = new Operand<double, eOperandType::Double>(std::stod(val));
-            break;
-        default:
-            errorHandler(errorType::invalidArg);
-    }
+    if (type == eOperandType::Int8)
+        operand = new Operand<int8_t, eOperandType::Int8>(static_cast<int8_t>(std::stoi(val)));
+    else if (type == eOperandType::Int16)
+        operand = new Operand<int16_t, eOperandType::Int16>(static_cast<int16_t>(std::stoi(val)));
+    else if (type == eOperandType::Int32)
+        operand = new Operand<int32_t, eOperandType::Int32>(static_cast<int32_t>(std::stoi(val)));
+    else if (type == eOperandType::Float)
+        operand = new Operand<float, eOperandType::Float>(std::stof(val));
+    else if (type == eOperandType::Double)
+        operand = new Operand<double, eOperandType::Double>(std::stod(val));
+    else errorHandler(errorType::invalidArg);
     
     stk.push_front(operand);
 
@@ -117,19 +104,20 @@ int executeArithmetic(std::list <IOperand*> stk, Cmd op)
 {
     mark_unused(op);
 
-    // Operand lhs = I;
-    // Operand rhs = Int8Operand(0);
-    // if (static_cast<int>(stk.size()) < 2) return 6;   // errorType::stackUnderflow
-    // lhs = stk.front();
-    // stk.pop_front();
-    // rhs = stk.front();
-    // stk.pop_front();
+    if (static_cast<int>(stk.size()) < 2) return 6;   // errorType::stackUnderflow
 
-    // TODO check for divide by zero
+    IOperand* operand = nullptr;
+    IOperand& lhs = *stk.front();
+    stk.pop_front();
+    IOperand& rhs = *stk.front();
+    stk.pop_front();
 
-    // if (op == Cmd::Add) {
+    if (op == Cmd::Add) operand = lhs + rhs;
+    else if (op == Cmd::Sub) operand = lhs - rhs;
+    else if (op == Cmd::Mul) operand = lhs * rhs;
+    else if (op == Cmd::Div) operand = lhs / rhs;
+    else if (op == Cmd::Mod) operand = lhs % rhs;
 
-    // }
-
+    stk.push_front(operand);
     return EXIT_SUCCESS;
 }
