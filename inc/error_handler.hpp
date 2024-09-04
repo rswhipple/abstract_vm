@@ -8,9 +8,10 @@ enum class errorType
 {
     usage = 1,
     read,
-	instruction,
+	invalidArg,
 	divideByZero,
 	emptyStack,
+    stackUndeflow,
 };
 
 class AvmException : public std::runtime_error {
