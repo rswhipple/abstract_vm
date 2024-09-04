@@ -9,8 +9,8 @@ int errorHandler(errorType typ)
             throw AvmException("Usage: ./abstract_vm [filename]");
         case errorType::read:
             throw AvmException("Error: Could not read file.");
-        case errorType::instruction:
-            throw AvmException("Error: Invalid instruction.");
+        case errorType::invalidArg:
+            throw AvmException("Error: Invalid instruction arg.");
         case errorType::divideByZero:
             throw AvmException("Error: Attempting to divide by 0.");
         case errorType::emptyStack:
