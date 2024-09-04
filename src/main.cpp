@@ -1,6 +1,27 @@
 
 #include "../inc/main.hpp"
 
+
+int main(int argc, char* argv[])
+{
+    try { 
+        if (argc > 2) errorHandler(errorType::usage);
+        else if (argc > 1) {
+            int result = readFile(argv[1]);
+            if (result != 0) errorHandler(static_cast<errorType>(result));
+        } 
+        else {
+            int result = readFromStdin();
+            if (result != 0) errorHandler(static_cast<errorType>(result));
+        }
+    } catch (const AvmException& e) {
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    return EXIT_SUCCESS;
+}
+
 const std::array<std::string, 13> instructionList = {
 	"push",	
 	"pop", 
@@ -24,17 +45,3 @@ const std::array<std::string, 5> valueList = {
   "float",
   "double"
 };
-
-int main(int argc, char* argv[])
-{
-    if (argc > 2) {
-        std::cerr << "Usage: " << argv[0] << " [filename]" << std::endl;
-        return EXIT_FAILURE;  
-    } else if (argc > 1) {
-        if (readFile(argv[1]) != 0) return EXIT_FAILURE;
-    } else {
-        if (readFromStdin() != 0) return EXIT_FAILURE;
-    } 
-
-    return EXIT_SUCCESS;
-}

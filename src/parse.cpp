@@ -7,10 +7,7 @@ int readFile(const std:: string& filename)
     // Open file stream
     std::ifstream file(filename);
 
-    if (!file.is_open()) {
-        std::cerr << "Error: Could not open file" << filename << std::endl;
-        return EXIT_FAILURE;
-    }
+    if (!file.is_open()) return 2;
 
     // Instanciate Instruction obj + create vector to store all instructions.
     std::vector<Instruction> commands;
@@ -21,7 +18,8 @@ int readFile(const std:: string& filename)
     while (std::getline(file, line)) {
         if (line == "exit") {
             file.close();
-            if (executeCmd(commands) != 0) return EXIT_FAILURE;
+            // Execute all commands
+            if (execute(commands) != 0) return EXIT_FAILURE;
             return EXIT_SUCCESS;
         }
         if (!isValidInstruction(line)) return EXIT_FAILURE;
@@ -44,7 +42,8 @@ int readFromStdin()
     std::string line;
     while (std::getline(std::cin, line)) {
         if (line == ";;") {
-            if (executeCmd(commands) != 0) return EXIT_FAILURE;
+            // Execute all commands
+            if (execute(commands) != 0) return EXIT_FAILURE;
             return EXIT_SUCCESS;
         }
         if (!isValidInstruction(line)) return EXIT_FAILURE;
@@ -56,7 +55,6 @@ int readFromStdin()
 }
 
 
-// improve this later ?
 bool isValidValue(const std::string& str, const std::array<std::string, 5>& prefixes) 
 {
     for (const auto& prefix : prefixes) {
@@ -152,9 +150,3 @@ int tokenize(std::string line, Instruction& inst)
     return EXIT_SUCCESS;
 }
 
-int executeCmd(std::vector<Instruction> commands) 
-{
-    // execute the command here
-    mark_unused(commands);
-    return EXIT_SUCCESS;
-}
