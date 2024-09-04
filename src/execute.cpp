@@ -28,7 +28,7 @@ Cmd stringToCmd(const std::string& instruction) {
 int execute(std::vector<Instruction> commands) 
 {
     // execute the command here
-    std::list <OperandVar> stack;
+    std::list <IOperand*> stack;
 
     for (int i = 0; i < static_cast<int>(commands.size()); i++) {
         Cmd cmd = stringToCmd(commands[i].getCommand());
@@ -40,43 +40,72 @@ int execute(std::vector<Instruction> commands)
                 executeAssert(stack, commands[i].getType(), commands[i].getValue());
                 break;
             case Cmd::Pop:
-                if (stack.empty()) 
+                if (stack.empty()) return 5; // errorType::emptyStack
                 stack.pop_front();
-                // TODO Add error message if stack is empty
                 break;
             case Cmd::Dump:
                 executeDump(stack);
                 break;
-            case Cmd::Add:
-                // pop top 2 numbers and add, handle precision diff if any
-            case Cmd::Sub:
-            case Cmd::Mul:
-            case Cmd::Div:
-            case Cmd::Mod:
             case Cmd::Print:
                 //Verifies that the value at the top of the stack is an 8 bits integer. 
                 // (If not, see the instruction assert), then interprets it as an ASCII value and 
                 // displays the corresponding character on the standard output. ????
             case Cmd::Error:
-                std::cerr << "Invalid command string passed to execute()" << std::endl;
-                return EXIT_FAILURE;
+                return 3;   // errorType::instruction
+            case Cmd::Add:
+            case Cmd::Sub:
+            case Cmd::Mul:
+            case Cmd::Div:
+            case Cmd::Mod:
+            default:
+                int result = executeArithmetic(stack, cmd);
+                return result;
         }
     }
 
     return EXIT_SUCCESS;
 }
 
-void executeDump(std::list <OperandVar> stk) 
+void executeDump(std::list <IOperand*> stk) 
 {
     // Display each value in stack, most recent to oldest, separated by a newline.
-    for (const auto& operand : stk) {
-        std::visit([](const auto& op) {
-            std::cout << op.toString() << std::endl; 
-        }, operand);
+    for (const auto& op : stk) {
+        IOperand& operandRef = *op;
+        std::cout << operandRef.toString() << std::endl; 
     }
 }
 
-int executePush(std::list <OperandVar> stk, std::string typ, std::string val)
+int executePush(std::list <IOperand*> stk, std::string typ, std::string val)
+{
+    eOperandType type = stringToType(typ);
+    IOperand* operand = nullptr;
+
+    switch (type) {
+        case eOperandType::Int8:
+            operand = new Operand<int8_t, eOperandType::Int8>(static_cast<int8_t>(std::stoi(val)));
+            break;
+        case eOperandType::Int16:
+            operand = new Operand<int16_t, eOperandType::Int16>(static_cast<int16_t>(std::stoi(val)));
+            break;
+        case eOperandType::Int32:
+            operand = new Operand<int32_t, eOperandType::Int32>(static_cast<int32_t>(std::stoi(val)));
+            break;
+        case eOperandType::Float:
+            operand = new Operand<float, eOperandType::Float>(std::stof(val));
+            break;
+        case eOperandType::Double:
+            operand = new Operand<double, eOperandType::Double>(std::stod(val));
+            break;
+        default:
+            errorHandler(errorType::invalidArg);
+    }
+    
+    stk.push_front(operand);
+
+    return EXIT_SUCCESS;
+}
+
+int executeAssert(std::list <IOperand*> stk, std::string typ, std::string val)
 {
     mark_unused(stk);
     mark_unused(typ);
@@ -84,10 +113,23 @@ int executePush(std::list <OperandVar> stk, std::string typ, std::string val)
     return EXIT_SUCCESS;
 }
 
-int executeAssert(std::list <OperandVar> stk, std::string typ, std::string val)
+int executeArithmetic(std::list <IOperand*> stk, Cmd op)
 {
-    mark_unused(stk);
-    mark_unused(typ);
-    mark_unused(val);
+    mark_unused(op);
+
+    // Operand lhs = I;
+    // Operand rhs = Int8Operand(0);
+    // if (static_cast<int>(stk.size()) < 2) return 6;   // errorType::stackUnderflow
+    // lhs = stk.front();
+    // stk.pop_front();
+    // rhs = stk.front();
+    // stk.pop_front();
+
+    // TODO check for divide by zero
+
+    // if (op == Cmd::Add) {
+
+    // }
+
     return EXIT_SUCCESS;
 }
