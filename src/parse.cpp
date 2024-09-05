@@ -22,8 +22,8 @@ int readFile(const std:: string& filename)
             if (runtimeError) return runtimeError;
             return EXIT_SUCCESS;
         }
-        if (!isValidInstruction(line)) return EXIT_FAILURE;
-        if (tokenize(line, inst) != 0) return EXIT_FAILURE;
+        if (!isValidInstruction(line)) return 3; // error: invalid instruction
+        if (tokenize(line, inst) != 0) return EXIT_FAILURE; // should this also be invalid instruction?
         if (inst.getCommand() == ";") continue;     // Skips comments.
         commands.emplace_back(inst);    // Store current inst in vector.
     }
@@ -47,8 +47,8 @@ int readFromStdin()
             if (runtimeError) return runtimeError;
             return EXIT_SUCCESS;
         }
-        if (!isValidInstruction(line)) return EXIT_FAILURE;
-        if (tokenize(line, inst) != 0) return EXIT_FAILURE;
+        if (!isValidInstruction(line)) return 3; // error: invalid instruction
+        if (tokenize(line, inst) != 0) return EXIT_FAILURE; // should this also be invalid instruction?
         if (inst.getCommand() == ";") continue;     // Skips comments.
         commands.emplace_back(inst);    // Store current inst in vector.
     }
@@ -80,7 +80,6 @@ bool isValidInstruction(const std::string& line)
 {
     int spaceCount;
     if ((spaceCount = std::count(line.begin(), line.end(), ' ')) > 1){
-        std::cerr << "Error: Invalid instruction" << std::endl;
         return false;
     }
     
@@ -92,18 +91,14 @@ bool isValidInstruction(const std::string& line)
         if (str1 == "push" || str1 == "assert") {
             ss >> str2;
             if (isValidValue(str2, valueList)) {
-                std::cout << "Valid instruction: " << str1 << " " << str2 << std::endl;
                 return true;
             }
         } else if (str1 == ";") {
-            std::cout << "Valid instruction: " << str1 << std::endl;
             return true;
         } else if (spaceCount == 0 ) {
-            std::cout << "Valid instruction: " << str1 << std::endl;
             return true;
         }
     }
-    std::cerr << "Error: Invalid instruction" << std::endl;
     return false;
 }
 
