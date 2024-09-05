@@ -18,8 +18,8 @@ int readFile(const std:: string& filename)
     while (std::getline(file, line)) {
         if (line == "exit") {
             file.close();
-            // Execute all commands
-            if (execute(commands) != 0) return EXIT_FAILURE;
+            int runtimeError = execute(commands);
+            if (runtimeError) return runtimeError;
             return EXIT_SUCCESS;
         }
         if (!isValidInstruction(line)) return EXIT_FAILURE;
@@ -43,7 +43,8 @@ int readFromStdin()
     while (std::getline(std::cin, line)) {
         if (line == ";;") {
             // Execute all commands
-            if (execute(commands) != 0) return EXIT_FAILURE;
+            int runtimeError = execute(commands);
+            if (runtimeError) return runtimeError;
             return EXIT_SUCCESS;
         }
         if (!isValidInstruction(line)) return EXIT_FAILURE;

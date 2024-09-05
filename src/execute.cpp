@@ -46,15 +46,15 @@ int execute(std::vector<Instruction> commands)
             case Cmd::Dump:
                 executeDump(stack);
                 break;
-            // case Cmd::Print:
+            case Cmd::Print:
                 // Verifies that the value at the top of the stack is an 8 bits integer. 
                 // (If not, see the instruction assert), then interprets it as an ASCII value and 
                 // displays the corresponding character on the standard output. ????
-            // case Cmd::Error:
-                // return 3;   // errorType::instruction
+            case Cmd::Error:
+                return 3;   // errorType::instruction
             default:
                 int result = executeArithmetic(stack, cmd);
-                if (!result) return EXIT_FAILURE;
+                if (!result) return result;
                 
         }
     }
