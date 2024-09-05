@@ -25,22 +25,30 @@ Cmd stringToCmd(const std::string& instruction) {
 }
 
 
+void printLineNumber(int lineNumber){
+    std::cout << "Line " << lineNumber << " : ";
+}
+
+
 int execute(std::vector<Instruction> commands) 
 {
     // execute the command here
     std::list <IOperand*> stack;
-
-    for (int i = 0; i < static_cast<int>(commands.size()); i++) {
-        Cmd cmd = stringToCmd(commands[i].getCommand());
+    int lineNumber = 0;
+    for (; lineNumber < static_cast<int>(commands.size()); lineNumber++) {
+        Cmd cmd = stringToCmd(commands[lineNumber].getCommand());
         switch (cmd) {
             case Cmd::Push:
-                executePush(stack, commands[i].getType(), commands[i].getValue());
+                executePush(stack, commands[lineNumber].getType(), commands[lineNumber].getValue());
                 break;
             case Cmd::Assert:
-                executeAssert(stack, commands[i].getType(), commands[i].getValue());
+                executeAssert(stack, commands[lineNumber].getType(), commands[lineNumber].getValue());
                 break;
             case Cmd::Pop:
-                if (stack.empty()) return 5; // errorType::emptyStack
+                if (stack.empty()) {
+                    printLineNumber(lineNumber);
+                    return 5;  // errorType::emptyStack
+                }
                 stack.pop_front();
                 break;
             case Cmd::Dump:
@@ -51,10 +59,14 @@ int execute(std::vector<Instruction> commands)
                 // (If not, see the instruction assert), then interprets it as an ASCII value and 
                 // displays the corresponding character on the standard output. ????
             case Cmd::Error:
+                printLineNumber(lineNumber);
                 return 3;   // errorType::instruction
             default:
                 int result = executeArithmetic(stack, cmd);
-                if (!result) return result;
+                if (!result) {
+                    printLineNumber(lineNumber);
+                    return result;
+                }
                 
         }
     }

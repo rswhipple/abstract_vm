@@ -41,7 +41,7 @@ int readFromStdin()
     // Parse program line by line
     std::string line;
     while (std::getline(std::cin, line)) {
-        if (line == ";;") {
+        if (line == ";;\n") {
             // Execute all commands
             int runtimeError = execute(commands);
             if (runtimeError) return runtimeError;
