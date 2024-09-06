@@ -17,6 +17,8 @@ int errorHandler(errorType typ)
             throw AvmException("Error : Attempting to access value on empty stack.");
         case errorType::nonmatchingAssertValue:
             throw AvmException("Error : Nonmatching assert value.");
+        case errorType::earlyExit:
+            throw AvmException("Error : 'exit' called before end of program.");
         default:
             throw AvmException("Error : Unknown error.");
     }

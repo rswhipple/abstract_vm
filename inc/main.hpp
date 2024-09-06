@@ -37,6 +37,7 @@ enum class Cmd
 	Div,
 	Mod,
 	Print,
+	Exit,
 	Error,
 };
 
