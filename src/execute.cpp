@@ -30,7 +30,7 @@ void printLineNumber(int lineNumber){
 }
 
 
-int execute(std::vector<Instruction> commands) 
+int execute(std::vector<Instruction>& commands) 
 {
     // execute the command here
     std::list <IOperand*> stack;
@@ -63,18 +63,17 @@ int execute(std::vector<Instruction> commands)
                 return 3;   // errorType::instruction
             default:
                 int result = executeArithmetic(stack, cmd);
-                if (!result) {
+                if (result) {
                     printLineNumber(lineNumber);
                     return result;
                 }
-                
         }
     }
 
     return EXIT_SUCCESS;
 }
 
-void executeDump(std::list <IOperand*> stk) 
+void executeDump(std::list<IOperand*>& stk) 
 {
     // Display each value in stack, most recent to oldest, separated by a newline.
     for (const auto& op : stk) {
@@ -83,7 +82,7 @@ void executeDump(std::list <IOperand*> stk)
     }
 }
 
-int executePush(std::list <IOperand*> stk, std::string typ, std::string val)
+int executePush(std::list<IOperand*>& stk, std::string typ, std::string val)
 {
     eOperandType type = stringToType(typ);
     IOperand* operand = nullptr;
@@ -101,11 +100,13 @@ int executePush(std::list <IOperand*> stk, std::string typ, std::string val)
     else errorHandler(errorType::invalidArg);
     
     stk.push_front(operand);
+    // std::cout << stk.front()->toString() << std::endl;               // logging
+    // std::cout << "Pushed: " << operand->toString() << std::endl;     // logging
 
     return EXIT_SUCCESS;
 }
 
-int executeAssert(std::list <IOperand*> stk, std::string typ, std::string val)
+int executeAssert(std::list<IOperand*>& stk, std::string typ, std::string val)
 {
     (void)stk;
     (void)typ;
@@ -113,22 +114,24 @@ int executeAssert(std::list <IOperand*> stk, std::string typ, std::string val)
     return EXIT_SUCCESS;
 }
 
-int executeArithmetic(std::list <IOperand*> stk, Cmd op)
+int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
 {
     if (static_cast<int>(stk.size()) < 2) return 6;   // errorType::stackUnderflow
 
     IOperand* operand = nullptr;
-    IOperand& lhs = *stk.front();
+    IOperand* lhs = stk.front();
     stk.pop_front();
-    IOperand& rhs = *stk.front();
+    IOperand* rhs = stk.front();
     stk.pop_front();
 
-    if (op == Cmd::Add) operand = lhs + rhs;
-    else if (op == Cmd::Sub) operand = lhs - rhs;
-    else if (op == Cmd::Mul) operand = lhs * rhs;
-    else if (op == Cmd::Div) operand = lhs / rhs;
-    else if (op == Cmd::Mod) operand = lhs % rhs;
+    if (op == Cmd::Add) operand = *lhs + *rhs;
+    else if (op == Cmd::Sub) operand = *lhs - *rhs;
+    else if (op == Cmd::Mul) operand = *lhs * *rhs;
+    else if (op == Cmd::Div) operand = *lhs / *rhs;
+    else if (op == Cmd::Mod) operand = *lhs % *rhs;
 
+    // TODO add an error check here, compare regular math to operand math
     stk.push_front(operand);
+    
     return EXIT_SUCCESS;
 }
