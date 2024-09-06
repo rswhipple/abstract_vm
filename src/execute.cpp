@@ -14,6 +14,7 @@ Cmd stringToCmd(const std::string& instruction) {
         {"div", Cmd::Div},
         {"mod", Cmd::Mod},
         {"print", Cmd::Print},
+        {"exit", Cmd::Exit},
     };
 
     auto iterator = cmdMap.find(instruction);
@@ -58,12 +59,17 @@ int execute(std::vector<Instruction>& commands)
                 executeDump(stack);
                 break;
             case Cmd::Print:
-                // Verifies that the value at the top of the stack is an 8 bits integer. 
-                // (If not, see the instruction assert), then interprets it as an ASCII value and 
-                // displays the corresponding character on the standard output. ????
+                executePrint(stack);
+                break;
             case Cmd::Error:
                 printLineNumber(lineNumber);
                 return 3;   // errorType::instruction
+            case Cmd::Exit:
+                if (lineNumber < static_cast<int>(commands.size()) - 1) {
+                    printLineNumber(lineNumber);
+                    return 9;
+                }
+                break;
             default:
                 int result = executeArithmetic(stack, cmd);
                 if (result) {
@@ -103,8 +109,6 @@ int executePush(std::list<IOperand*>& stk, std::string typ, std::string val)
     else errorHandler(errorType::invalidArg);
     
     stk.push_front(operand);
-    // std::cout << stk.front()->toString() << std::endl;               // logging
-    // std::cout << "Pushed: " << operand->toString() << std::endl;     // logging
 
     return EXIT_SUCCESS;
 }
@@ -113,9 +117,6 @@ int executeAssert(std::list<IOperand*>& stk, std::string typ, std::string val)
 {
     if (stk.front()->toString() == val && stk.front()->getType() == stringToType(typ)) return EXIT_SUCCESS;
 
-    // (void)stk;
-    // (void)typ;
-    // (void)val;
     return EXIT_FAILURE;
 }
 
@@ -139,4 +140,15 @@ int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
     stk.push_front(operand);
     
     return EXIT_SUCCESS;
+}
+
+
+int executePrint(std::list<IOperand*>& stk)
+{
+    if (stk.front()->getType() == eOperandType::Int8) {
+        std::cout << stk.front()->toString() << std::endl;
+        return EXIT_SUCCESS;
+    }
+
+    return EXIT_FAILURE;
 }
