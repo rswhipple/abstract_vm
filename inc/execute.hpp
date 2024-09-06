@@ -6,9 +6,9 @@
 #include <list>
 
 
-int execute(std::vector<Instruction> commands);
-void executeDump(std::list <IOperand*> stk);
-int executePush(std::list <IOperand*> stk, std::string typ, std::string val);
-int executeAssert(std::list <IOperand*> stk, std::string typ, std::string val);
+int execute(std::vector<Instruction>& commands);
+void executeDump(std::list <IOperand*>& stk);
+int executePush(std::list <IOperand*>& stk, std::string typ, std::string val);
+int executeAssert(std::list <IOperand*>& stk, std::string typ, std::string val);
 
 #endif

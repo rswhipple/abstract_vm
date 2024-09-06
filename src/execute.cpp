@@ -30,7 +30,7 @@ void printLineNumber(int lineNumber){
 }
 
 
-int execute(std::vector<Instruction> commands) 
+int execute(std::vector<Instruction>& commands) 
 {
     // execute the command here
     std::list <IOperand*> stack;
@@ -67,14 +67,13 @@ int execute(std::vector<Instruction> commands)
                     printLineNumber(lineNumber);
                     return result;
                 }
-                
         }
     }
 
     return EXIT_SUCCESS;
 }
 
-void executeDump(std::list <IOperand*> stk) 
+void executeDump(std::list<IOperand*>& stk) 
 {
     // Display each value in stack, most recent to oldest, separated by a newline.
     for (const auto& op : stk) {
@@ -83,7 +82,7 @@ void executeDump(std::list <IOperand*> stk)
     }
 }
 
-int executePush(std::list <IOperand*> stk, std::string typ, std::string val)
+int executePush(std::list<IOperand*>& stk, std::string typ, std::string val)
 {
     eOperandType type = stringToType(typ);
     IOperand* operand = nullptr;
@@ -101,11 +100,12 @@ int executePush(std::list <IOperand*> stk, std::string typ, std::string val)
     else errorHandler(errorType::invalidArg);
     
     stk.push_front(operand);
+    std::cout << "Pushed: " << operand->toString() << std::endl;
 
     return EXIT_SUCCESS;
 }
 
-int executeAssert(std::list <IOperand*> stk, std::string typ, std::string val)
+int executeAssert(std::list<IOperand*>& stk, std::string typ, std::string val)
 {
     (void)stk;
     (void)typ;
