@@ -26,7 +26,7 @@ Cmd stringToCmd(const std::string& instruction) {
 
 
 void printLineNumber(int lineNumber){
-    std::cout << "Line " << lineNumber << " : ";
+    std::cout << "Line " << lineNumber + 1 << " : ";
 }
 
 
@@ -42,7 +42,10 @@ int execute(std::vector<Instruction>& commands)
                 executePush(stack, commands[lineNumber].getType(), commands[lineNumber].getValue());
                 break;
             case Cmd::Assert:
-                executeAssert(stack, commands[lineNumber].getType(), commands[lineNumber].getValue());
+                if ((executeAssert(stack, commands[lineNumber].getType(), commands[lineNumber].getValue())) != 0){
+                    printLineNumber(lineNumber);
+                    return 8; 
+                }
                 break;
             case Cmd::Pop:
                 if (stack.empty()) {
@@ -108,10 +111,12 @@ int executePush(std::list<IOperand*>& stk, std::string typ, std::string val)
 
 int executeAssert(std::list<IOperand*>& stk, std::string typ, std::string val)
 {
-    (void)stk;
-    (void)typ;
-    (void)val;
-    return EXIT_SUCCESS;
+    if (stk.front()->toString() == val && stk.front()->getType() == stringToType(typ)) return EXIT_SUCCESS;
+
+    // (void)stk;
+    // (void)typ;
+    // (void)val;
+    return EXIT_FAILURE;
 }
 
 int executeArithmetic(std::list<IOperand*>& stk, Cmd op)

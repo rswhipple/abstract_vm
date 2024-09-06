@@ -13,6 +13,7 @@ enum class errorType
 	emptyStack,
     stackUndeflow,
     binary,
+    nonmatchingAssertValue
 };
 
 class AvmException : public std::runtime_error {
