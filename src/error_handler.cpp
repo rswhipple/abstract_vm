@@ -15,6 +15,8 @@ int errorHandler(errorType typ)
             throw AvmException("Error : Attempting to divide by 0.");
         case errorType::emptyStack:
             throw AvmException("Error : Attempting to access value on empty stack.");
+        case errorType::nonmatchingAssertValue:
+            throw AvmException("Error : Nonmatching assert value.");
         default:
             throw AvmException("Error : Unknown error.");
     }
