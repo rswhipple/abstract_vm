@@ -144,7 +144,6 @@ int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
     else if (op == Cmd::Div) operand = *lhs / *rhs;
     else if (op == Cmd::Mod) operand = *lhs % *rhs;
 
-    // TODO add an error check here, compare regular math to operand math
     stk.push_front(operand);
     
     return EXIT_SUCCESS;
