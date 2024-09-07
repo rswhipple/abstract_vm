@@ -43,5 +43,7 @@ enum class Cmd
 
 Cmd stringToCmd(const std::string& instName);
 int executeArithmetic(std::list<IOperand*>& stk, Cmd op);
+bool lhsIsMostPrecise(IOperand* lhs, IOperand* rhs);
+
 
 #endif
