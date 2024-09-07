@@ -126,6 +126,17 @@ int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
     IOperand* lhs = stk.front(); // store v2 in the lhs
     stk.pop_front();
 
+    // Check for precision
+    // Turn the operand that is a lower precision into the higher one
+    if (lhs->getType() != rhs->getType()) {
+        if (!lhsIsMostPrecise(lhs, rhs)) {
+            eOperandType e = rhs->getType();
+            lhs = factory.createOperand(e, lhs->toString());
+        } else {
+            eOperandType e = lhs->getType();
+            rhs = factory.createOperand(e, rhs->toString());
+        }
+    }
 
     if (op == Cmd::Add) operand = *lhs + *rhs;
     else if (op == Cmd::Sub) operand = *lhs - *rhs;
