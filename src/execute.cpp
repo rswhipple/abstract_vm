@@ -125,20 +125,21 @@ int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
     if (static_cast<int>(stk.size()) < 2) return 6;   // errorType::stackUnderflow
 
     IOperand* operand = nullptr;
-    IOperand* lhs = stk.front();
-    stk.pop_front();
-    IOperand* rhs = stk.front();
-    stk.pop_front();
-
     /* 
        For non commutative operations, you must consider for the following stack: 
        v1 on v2, the calculation in infix notation: v2 op v1.
     */ 
-    if (op == Cmd::Add) operand = *rhs + *lhs;
-    else if (op == Cmd::Sub) operand = *rhs - *lhs;
-    else if (op == Cmd::Mul) operand = *rhs * *lhs;
-    else if (op == Cmd::Div) operand = *rhs / *lhs;
-    else if (op == Cmd::Mod) operand = *rhs % *lhs;
+    IOperand* rhs = stk.front(); // store v1 in the rhs
+    stk.pop_front();
+    IOperand* lhs = stk.front(); // store v2 in the lhs
+    stk.pop_front();
+
+
+    if (op == Cmd::Add) operand = *lhs + *rhs;
+    else if (op == Cmd::Sub) operand = *lhs - *rhs;
+    else if (op == Cmd::Mul) operand = *lhs * *rhs;
+    else if (op == Cmd::Div) operand = *lhs / *rhs;
+    else if (op == Cmd::Mod) operand = *lhs % *rhs;
 
     // TODO add an error check here, compare regular math to operand math
     stk.push_front(operand);
