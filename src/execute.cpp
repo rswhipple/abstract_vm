@@ -130,11 +130,15 @@ int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
     IOperand* rhs = stk.front();
     stk.pop_front();
 
-    if (op == Cmd::Add) operand = *lhs + *rhs;
-    else if (op == Cmd::Sub) operand = *lhs - *rhs;
-    else if (op == Cmd::Mul) operand = *lhs * *rhs;
-    else if (op == Cmd::Div) operand = *lhs / *rhs;
-    else if (op == Cmd::Mod) operand = *lhs % *rhs;
+    /* 
+       For non commutative operations, you must consider for the following stack: 
+       v1 on v2, the calculation in infix notation: v2 op v1.
+    */ 
+    if (op == Cmd::Add) operand = *rhs + *lhs;
+    else if (op == Cmd::Sub) operand = *rhs - *lhs;
+    else if (op == Cmd::Mul) operand = *rhs * *lhs;
+    else if (op == Cmd::Div) operand = *rhs / *lhs;
+    else if (op == Cmd::Mod) operand = *rhs % *lhs;
 
     // TODO add an error check here, compare regular math to operand math
     stk.push_front(operand);
