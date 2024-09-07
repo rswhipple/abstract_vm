@@ -45,3 +45,12 @@ const std::array<std::string, 5> valueList = {
   "float",
   "double"
 };
+
+// Define the 'constructors' array
+const std::array<OperandFactory::CreateOperandFunc, 5> OperandFactory::constructors = {
+    &OperandFactory::_createInt8,
+    &OperandFactory::_createInt16,
+    &OperandFactory::_createInt32,
+    &OperandFactory::_createFloat,
+    &OperandFactory::_createDouble
+};
