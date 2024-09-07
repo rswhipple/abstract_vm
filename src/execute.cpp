@@ -94,19 +94,10 @@ void executeDump(std::list<IOperand*>& stk)
 int executePush(std::list<IOperand*>& stk, std::string typ, std::string val)
 {
     eOperandType type = stringToType(typ);
-    IOperand* operand = nullptr;
+    OperandFactory factory;
 
-    if (type == eOperandType::Int8)
-        operand = new Operand<int8_t, eOperandType::Int8>(static_cast<int8_t>(std::stoi(val)));
-    else if (type == eOperandType::Int16)
-        operand = new Operand<int16_t, eOperandType::Int16>(static_cast<int16_t>(std::stoi(val)));
-    else if (type == eOperandType::Int32)
-        operand = new Operand<int32_t, eOperandType::Int32>(static_cast<int32_t>(std::stoi(val)));
-    else if (type == eOperandType::Float)
-        operand = new Operand<float, eOperandType::Float>(std::stof(val));
-    else if (type == eOperandType::Double)
-        operand = new Operand<double, eOperandType::Double>(std::stod(val));
-    else errorHandler(errorType::invalidArg);
+    // Create Operand using factory pattern
+    IOperand* operand = factory.createOperand(type, val);
     
     stk.push_front(operand);
 
@@ -124,6 +115,7 @@ int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
 {
     if (static_cast<int>(stk.size()) < 2) return 6;   // errorType::stackUnderflow
 
+    OperandFactory factory;
     IOperand* operand = nullptr;
     /* 
        For non commutative operations, you must consider for the following stack: 
