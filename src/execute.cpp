@@ -130,6 +130,10 @@ int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
     IOperand* rhs = stk.front();
     stk.pop_front();
 
+    // Check for precision
+    // Turn the operand that is a lower precision into the higher one
+    // Perform arithmetic
+
     /* 
        For non commutative operations, you must consider for the following stack: 
        v1 on v2, the calculation in infix notation: v2 op v1.

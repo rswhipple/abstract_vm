@@ -100,8 +100,27 @@ public:
 		return OperandType;
 	}
 
+	/*
+	Precision
+	When an operation happens between two operands from the same type real, 
+	there is no problems. However, what about when the types real are 
+	different?
+
+	The usual method is to sequence types using their precision. For the 
+	machine you should use the following order: 
+	Int8 < Int16 < Int32 < Float < Double
+
+	To use this sequence for the machine, it is possible to associate an 
+	integer with each type to maintain the order, thanks to an enum for 
+	example.
+
+	For the project, the type returned is the more precise type of the two 
+	operands.
+	*/
+
 	IOperand * operator+(const IOperand &rhs) const override {
 		T rhsValue = static_cast<T>(std::stod(rhs.toString()));
+		if (self.getPrecision() < rhs.getPrecision()) 
 		return new Operand(value + rhsValue);
 	}
 
