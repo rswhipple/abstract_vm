@@ -130,6 +130,10 @@ int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
     IOperand* rhs = stk.front();
     stk.pop_front();
 
+    // Check for precision
+    // Turn the operand that is a lower precision into the higher one
+    // Perform arithmetic
+
     if (op == Cmd::Add) operand = *lhs + *rhs;
     else if (op == Cmd::Sub) operand = *lhs - *rhs;
     else if (op == Cmd::Mul) operand = *lhs * *rhs;
