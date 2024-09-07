@@ -50,44 +50,8 @@ private:
 	T value;
 	std::string strValue;
 
-	IOperand* _createint8(const std::string& value) {
-        int8_t val = static_cast<int8_t>(std::stoi(value));
-        return new Operand(val);
-    }
-	IOperand* _createint16(const std::string& value) {
-        int16_t val = static_cast<int16_t>(std::stoi(value));
-        return new Operand(val);
-    }
-	IOperand* _createint32(const std::string& value) {
-        int32_t val = static_cast<int32_t>(std::stoi(value));
-        return new Operand(val);
-    }
-	IOperand* _createFloat(const std::string& value) {
-        float val = static_cast<float>(std::stof(value));
-        return new Operand(val);
-    }
-	IOperand* _createDouble(const std::string& value) {
-        double val = static_cast<double>(std::stod(value));
-        return new Operand(val);
-    }
-
-    typedef IOperand* (Operand::*CreateOperand)(const std::string&);
-
-    // Array of member function pointers
-    std::array<CreateOperand, 5> constructors = {
-        &Operand::_createint8,
-        &Operand::_createint16,
-        &Operand::_createint32,
-        &Operand::_createFloat,
-        &Operand::_createDouble
-    };
-
 public:
 	Operand(T val) : value(val), strValue(std::to_string(val)) {}
-
-    IOperand* createOperand(eOperandType type, const std::string& value) const {
-        return (this->*constructors[static_cast<size_t>(type)])(value);
-    }
 
 	std::string const & toString() const override {
 		return strValue;

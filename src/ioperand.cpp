@@ -11,3 +11,8 @@ eOperandType stringToType(const std::string& typStr) {
     // No error handling here, is there a way to fix? 
     // Can't return a nullptr, don't want to create an enum just for errors
 }
+
+bool lhsIsMostPrecise(IOperand* lhs, IOperand* rhs) {
+    if (lhs->getPrecision() > rhs->getPrecision()) return true;
+    return false;
+}
