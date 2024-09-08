@@ -9,6 +9,12 @@
 class OperandFactory {
 public:
     using CreateOperandFunc = IOperand* (*)(const std::string&);
+    
+    static const std::array<CreateOperandFunc, 5> constructors;
+    
+    IOperand* createOperand(eOperandType type, const std::string& value) const {
+        return constructors[static_cast<size_t>(type)](value);
+    }
 
 private:
     static IOperand* _createInt8(const std::string& value) {
@@ -34,13 +40,6 @@ private:
     static IOperand* _createDouble(const std::string& value) {
         double val = std::stod(value);
         return new Operand<double, eOperandType::Double>(val);
-    }
-
-public:
-    static const std::array<CreateOperandFunc, 5> constructors;
-    
-    IOperand* createOperand(eOperandType type, const std::string& value) const {
-        return constructors[static_cast<size_t>(type)](value);
     }
 };
 
