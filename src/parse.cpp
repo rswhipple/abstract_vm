@@ -23,7 +23,7 @@ int readFile(const std:: string& filename)
             return EXIT_SUCCESS;
         }
         if (!isValidInstruction(line)) return 3; // error: invalid instruction
-        if (tokenize(line, inst) != 0) return EXIT_FAILURE; // should this also be invalid instruction?
+        if (tokenize(line, inst) != 0) return 3; // error: invalid instruction
         if (inst.getCommand() == ";") continue;     // Skips comments.
         commands.emplace_back(inst);    // Store current inst in vector.
     }
@@ -48,7 +48,7 @@ int readFromStdin()
             return EXIT_SUCCESS;
         }
         if (!isValidInstruction(line)) return 3; // error: invalid instruction
-        if (tokenize(line, inst) != 0) return EXIT_FAILURE; // should this also be invalid instruction?
+        if (tokenize(line, inst) != 0) return 3; // error: invalid instruction
         if (inst.getCommand() == ";") continue;     // Skips comments.
         commands.emplace_back(inst);    // Store current inst in vector.
     }
@@ -56,7 +56,7 @@ int readFromStdin()
 }
 
 
-bool isValidValue(const std::string& str, const std::array<std::string, 5>& prefixes) 
+bool isValidPrefix(const std::string& str, const std::array<std::string, 5>& prefixes) 
 {
     for (const auto& prefix : prefixes) {
         if (str.find(prefix) == 0) {
@@ -76,6 +76,22 @@ bool isValidCommand(const std::string& str, const std::array<std::string, 13>& c
     return false;
 }
 
+bool isValidValue (const std::string& input)
+{
+    std::string value;
+    std::string type;
+    size_t open = input.find('(');
+    size_t close = input.find(')', open);
+
+    if (open != std::string::npos && close != std::string::npos && close > open) {
+        type = input.substr(0, open);    // Text before '('
+        value = input.substr(open + 1, close - open - 1); // Text between '(' and ')'
+        return true;
+    }
+
+    return false;
+}
+
 bool isValidInstruction(const std::string& line) 
 {
     int spaceCount;
@@ -90,7 +106,7 @@ bool isValidInstruction(const std::string& line)
     if (isValidCommand(str1, instructionList)) {
         if (str1 == "push" || str1 == "assert") {
             ss >> str2;
-            if (isValidValue(str2, valueList)) {
+            if (isValidPrefix(str2, valueList)) {
                 return true;
             }
         } else if (str1 == ";") {
@@ -102,16 +118,70 @@ bool isValidInstruction(const std::string& line)
     return false;
 }
 
+bool isValidParenthesis(std::string str, size_t& open, size_t& close) 
+{ 
+    int openCount = 0;
+    int closeCount = 0;
+    size_t index = 0;
+    std::string::iterator it;
+
+    for (it = str.begin(); it != str.end(); it++, index++) { 
+        if (*it == '(') {
+            open = index;
+            openCount++;
+            }
+        if (*it == ')') {
+            close = index;
+            closeCount++;
+            }
+    } 
+
+    // Check that there is only 1 '(' and 1 ')' 
+    // Check that the ')' is the last char of the str
+    if (openCount > 1 || closeCount > 1 || close != index - 1) 
+        return false;
+    return true;
+} 
+
+bool isValidInt(const std::string &str, std::string valid) 
+{ 
+    for (char ch : str) { 
+        // If ch isn't in valid string return false
+        if (valid.find(ch) == std::string::npos) return false;
+    } 
+
+    return true;
+} 
+
+bool isValidDecimal(const std::string &str, std::string valid) 
+{ 
+    int decimalPoint = 0;
+    for (char ch : str) { 
+        if (valid.find(ch) == std::string::npos) return false;
+        if (ch == '.') decimalPoint++;
+    } 
+
+    if (decimalPoint > 1) return false;
+    return true;
+} 
+
+
 bool splitTypeValue (const std::string& input, std::string& type, std::string& value)
 {
-    size_t open = input.find('(');
-    size_t close = input.find(')', open);
+    size_t open;
+    size_t close;
+
+    if (!isValidParenthesis(input, open, close)) return false;
 
     if (open != std::string::npos && close != std::string::npos && close > open) {
         type = input.substr(0, open);    // Text before '('
         value = input.substr(open + 1, close - open - 1); // Text between '(' and ')'
-        return true;
-    }
+    } else return false;
+
+    // validate value string
+    if (type == "int8" || type == "int16" || type == "int32") {
+        if (isValidInt(value, "0123456789")) return true;
+    } else if (isValidDecimal(value, "0123456789.")) return true;
 
     return false;
 }
@@ -135,7 +205,6 @@ int tokenize(std::string line, Instruction& inst)
             inst.setType(type);
             inst.setValue(value);
         } else {
-            std::cerr << "Invalid input format." << std::endl;
             return EXIT_FAILURE;
         }
     } else {
