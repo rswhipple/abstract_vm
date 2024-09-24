@@ -24,7 +24,6 @@ instructions during parsing.
 extern const std::array<std::string, 13> instructionList;
 extern const std::array<std::string, 5> valueList;
 
-
 enum class Cmd
 {
 	Push,
