@@ -1,8 +1,10 @@
-
 #include "../inc/main.hpp"
+#include <iostream>
 
+using namespace std;
 
-eOperandType stringToType(const std::string& typStr) {
+ 
+eOperandType stringToType(const string& typStr) {
     if (typStr == "int8") return eOperandType::Int8;
     else if (typStr == "int16") return eOperandType::Int16;
     else if (typStr == "int32") return eOperandType::Int32;

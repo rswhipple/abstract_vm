@@ -1,6 +1,13 @@
-
 #include "../inc/main.hpp"
-
+ 
+// Define the 'constructors' array
+const std::array<OperandFactory::CreateOperandFunc, 5> OperandFactory::constructors = {
+    &OperandFactory::_createInt8,
+    &OperandFactory::_createInt16,
+    &OperandFactory::_createInt32,
+    &OperandFactory::_createFloat,
+    &OperandFactory::_createDouble
+};
 
 Cmd stringToCmd(const std::string& instruction) {
     static const std::unordered_map<std::string, Cmd> cmdMap = {
@@ -17,7 +24,7 @@ Cmd stringToCmd(const std::string& instruction) {
         {"exit", Cmd::Exit},
     };
 
-    auto iterator = cmdMap.find(instruction);
+     auto iterator = cmdMap.find(instruction);
     if (iterator != cmdMap.end()) {
         return iterator->second; // key:value, second = value = enum
     } else {
@@ -25,12 +32,12 @@ Cmd stringToCmd(const std::string& instruction) {
     }
 }
 
-
+ 
 void printLineNumber(int lineNumber){
     std::cout << "Line " << lineNumber + 1 << " : ";
 }
 
-
+ 
 int execute(std::vector<Instruction>& commands) 
 {
     // execute the command here
@@ -79,7 +86,7 @@ int execute(std::vector<Instruction>& commands)
         }
     }
 
-    return EXIT_SUCCESS;
+     return EXIT_SUCCESS;
 }
 
 void executeDump(std::list<IOperand*>& stk) 
@@ -96,26 +103,25 @@ int executePush(std::list<IOperand*>& stk, std::string typ, std::string val)
     eOperandType type = stringToType(typ);
     OperandFactory factory;
 
-    // Create Operand using factory pattern
+     // Create Operand using factory pattern
     IOperand* operand = factory.createOperand(type, val);
     
     stk.push_front(operand);
 
-    return EXIT_SUCCESS;
+     return EXIT_SUCCESS;
 }
 
 int executeAssert(std::list<IOperand*>& stk, std::string typ, std::string val)
 {
     if (stk.front()->toString() == val && stk.front()->getType() == stringToType(typ)) return EXIT_SUCCESS;
 
-    return EXIT_FAILURE;
+     return EXIT_FAILURE;
 }
 
 int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
 {
     if (static_cast<int>(stk.size()) < 2) return 6;   // errorType::stackUnderflow
-
-    OperandFactory factory;
+     OperandFactory factory;
     IOperand* operand = nullptr;
     /* 
        For non commutative operations, you must consider for the following stack: 
@@ -126,7 +132,7 @@ int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
     IOperand* lhs = stk.front(); // store v2 in the lhs
     stk.pop_front();
 
-    // Check for precision
+     // Check for precision
     // Turn the operand that is a lower precision into the higher one
     if (lhs->getType() != rhs->getType()) {
         if (!lhsIsMostPrecise(lhs, rhs)) {
@@ -138,24 +144,25 @@ int executeArithmetic(std::list<IOperand*>& stk, Cmd op)
         }
     }
 
-    if (op == Cmd::Add) operand = *lhs + *rhs;
+     if (op == Cmd::Add) operand = *lhs + *rhs;
     else if (op == Cmd::Sub) operand = *lhs - *rhs;
     else if (op == Cmd::Mul) operand = *lhs * *rhs;
     else if (op == Cmd::Div) operand = *lhs / *rhs;
     else if (op == Cmd::Mod) operand = *lhs % *rhs;
 
-    stk.push_front(operand);
+     stk.push_front(operand);
     
     return EXIT_SUCCESS;
 }
 
-
+ 
 int executePrint(std::list<IOperand*>& stk)
 {
     if (stk.front()->getType() == eOperandType::Int8) {
-        std::cout << stk.front()->toString() << std::endl;
+        int val = stoi(stk.front()->toString());
+        std::cout << static_cast<char>(val);
         return EXIT_SUCCESS;
     }
 
-    return EXIT_FAILURE;
+     return EXIT_FAILURE;
 }

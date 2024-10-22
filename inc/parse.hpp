@@ -5,6 +5,12 @@
 #include <array>
 #include "instruction.hpp"
 
+/* 
+The 'instructionList' and 'valueList' arrays are used to validate the 
+instructions during parsing.
+*/
+extern const std::array<std::string, 13> instructionList;
+extern const std::array<std::string, 5> valueList;
 
 int readFile(const std:: string& filename);
 int readFromStdin();

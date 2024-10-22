@@ -3,6 +3,7 @@
 
 #include "ioperand.hpp"
 #include <array>
+#include <limits>
 
 
 // Factory pattern to manage creation of IOperand instances

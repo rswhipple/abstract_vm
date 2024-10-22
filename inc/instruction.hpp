@@ -24,6 +24,9 @@ public:
 	Instruction(const std::string& cmd, const std::string& typ,
 		const std::string& val)
 		: command(cmd), type(typ), value(val) {}
+	
+	/* Destructor */
+	~Instruction() {}
 
 	/* Setter and Getters*/
 	std::string getCommand() const { return command; }
